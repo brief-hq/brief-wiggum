@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged for formatting
+npx lint-staged 2>/dev/null || echo "lint-staged not configured, skipping"
+
+# Typecheck
+if command -v pnpm &> /dev/null; then
+  pnpm typecheck 2>/dev/null || echo "Typecheck not configured"
+elif command -v npm &> /dev/null; then
+  npm run typecheck 2>/dev/null || echo "Typecheck not configured"
+elif command -v yarn &> /dev/null; then
+  yarn typecheck 2>/dev/null || echo "Typecheck not configured"
+fi

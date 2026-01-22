@@ -1,0 +1,10 @@
+{
+  "_note": "Copy this file to settings.local.json and customize for your environment",
+  "permissions": {
+    "allow": [
+      "// Add project-specific permissions here",
+      "// Example: Bash(yarn:*)",
+      "// Example: mcp__custom-server__custom_tool:*"
+    ]
+  }
+}

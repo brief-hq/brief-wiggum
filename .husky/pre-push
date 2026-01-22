@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Block pushes to protected branches
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "main" ] || [ "$branch" = "master" ] || [ "$branch" = "production" ]; then
+  echo "Direct push to $branch is blocked. Use a PR."
+  exit 1
+fi
+
+# Validate lock file consistency (pnpm)
+if [ -f "pnpm-lock.yaml" ]; then
+  if git diff --cached --name-only | grep -q "package.json"; then
+    if ! git diff --cached --name-only | grep -q "pnpm-lock.yaml"; then
+      echo "Warning: package.json changed but pnpm-lock.yaml not updated"
+      echo "Run 'pnpm install' to update the lock file"
+    fi
+  fi
+fi
+
+# Validate lock file consistency (npm)
+if [ -f "package-lock.json" ]; then
+  if git diff --cached --name-only | grep -q "package.json"; then
+    if ! git diff --cached --name-only | grep -q "package-lock.json"; then
+      echo "Warning: package.json changed but package-lock.json not updated"
+      echo "Run 'npm install' to update the lock file"
+    fi
+  fi
+fi

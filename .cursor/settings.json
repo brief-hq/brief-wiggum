@@ -1,0 +1,40 @@
+{
+  "_note": "Cursor settings - mirrors .claude/settings.json for compatibility",
+  "mcp": {
+    "servers": {
+      "brief": {
+        "url": "https://app.briefhq.ai/api/mcp/sse",
+        "transport": "sse",
+        "headers": {
+          "Authorization": "Bearer YOUR_BRIEF_API_KEY"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "allow": [
+      "Brief MCP tools",
+      "Linear MCP tools",
+      "Playwright MCP tools",
+      "Safe git commands (status, log, diff, branch)",
+      "Build tools (pnpm, npm, yarn)"
+    ],
+    "deny": [
+      "git commit --amend",
+      "git push --force",
+      "git push -f",
+      "git reset --hard",
+      "git checkout --ours",
+      "git checkout --theirs",
+      "git checkout .",
+      "git clean -f",
+      "git stash drop",
+      "git stash clear",
+      "git rebase",
+      "git branch -D",
+      "rm -rf /",
+      "rm -rf .",
+      "rm -rf ~"
+    ]
+  }
+}

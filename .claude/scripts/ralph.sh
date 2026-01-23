@@ -48,7 +48,6 @@ LINEAR_ISSUE=""
 LINEAR_PROJECT=""
 BRIEF_DOC=""
 BUDGET="10.00"
-RESUME=true
 FULL_PREP=false
 VISUAL_CHECK=false
 VERBOSE=false
@@ -103,7 +102,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --no-resume)
-      RESUME=false
+      # RESUME flag reserved for future session continuation feature
       shift
       ;;
     --full-prep)
@@ -199,7 +198,8 @@ log() {
 
 # Initialize state with skill detection
 init_state() {
-  local detected_skills=$(detect_task_skills "$TASK")
+  local detected_skills
+  detected_skills=$(detect_task_skills "$TASK")
 
   cat > "$STATE_FILE" <<EOF
 {
@@ -224,7 +224,8 @@ update_state() {
   local verification_result=$3
   local output_summary=$4
 
-  local temp_file=$(mktemp)
+  local temp_file
+  temp_file=$(mktemp)
   jq --arg iter "$iteration" \
      --arg exit "$exit_code" \
      --arg verify "$verification_result" \
@@ -242,7 +243,8 @@ update_state() {
 
 finalize_state() {
   local status=$1
-  local temp_file=$(mktemp)
+  local temp_file
+  temp_file=$(mktemp)
   jq --arg status "$status" \
      --arg ts "$(date -Iseconds)" \
      '.status = $status | .completed_at = $ts' "$STATE_FILE" > "$temp_file"
@@ -435,7 +437,8 @@ main() {
     log "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
     # Build intelligent prompt
-    local prompt=$(build_intelligent_prompt $iteration "$previous_failures" "$previous_output")
+    local prompt
+    prompt=$(build_intelligent_prompt $iteration "$previous_failures" "$previous_output")
 
     if [[ "$DRY_RUN" == "true" ]]; then
       log "${BLUE}[DRY RUN] Prompt that would be sent:${NC}"
@@ -511,7 +514,8 @@ main() {
       verify_status="${verify_result%%:*}"
       local verify_rest="${verify_result#*:}"
       verify_failures="${verify_rest%%:*}"
-      verify_details="${verify_rest#*:}"
+      # verify_details available for future detailed error reporting
+      # verify_details="${verify_rest#*:}"
     fi
 
     # Capture output for next iteration

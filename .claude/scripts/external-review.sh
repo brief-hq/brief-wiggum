@@ -16,6 +16,7 @@ TARGET="${2:-}"
 # Load environment from .env.local in project root
 ENV_FILE="$(git rev-parse --show-toplevel 2>/dev/null)/.env.local"
 if [ -f "$ENV_FILE" ]; then
+  # shellcheck disable=SC2046
   export $(grep -E "^(OPENAI_API_KEY|GEMINI_API_KEY)=" "$ENV_FILE" | xargs)
 fi
 

@@ -502,11 +502,9 @@ main() {
     # Run verification
     local verify_status=""
     local verify_failures=""
-    local verify_details=""
     if [[ $claude_exit -ne 0 ]]; then
       verify_status="fail"
       verify_failures="claude"
-      verify_details="claude exited with code $claude_exit"
       log "${RED}✗ Claude failed (exit $claude_exit). Skipping verification.${NC}"
     else
       local verify_result

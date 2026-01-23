@@ -1,0 +1,100 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check scripts are executable
+        run: |
+          echo "Checking hook scripts..."
+          for script in .claude/hooks/*.sh; do
+            if [ -f "$script" ]; then
+              if [ ! -x "$script" ]; then
+                echo "ERROR: $script is not executable"
+                exit 1
+              fi
+              echo "✓ $script is executable"
+            fi
+          done
+
+          echo ""
+          echo "Checking utility scripts..."
+          for script in .claude/scripts/*.sh; do
+            if [ -f "$script" ]; then
+              if [ ! -x "$script" ]; then
+                echo "ERROR: $script is not executable"
+                exit 1
+              fi
+              echo "✓ $script is executable"
+            fi
+          done
+
+      - name: Validate shell scripts (shellcheck)
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: '.claude'
+          severity: warning
+
+      - name: Check for required files
+        run: |
+          required_files=(
+            "README.md"
+            "LICENSE"
+            "CLAUDE.md.template"
+            ".claude/settings.json"
+            ".claude/hooks/git-guard.sh"
+            ".claude/hooks/verify-complete.sh"
+            ".claude/scripts/ralph.sh"
+            ".claude/scripts/setup.sh"
+          )
+
+          echo "Checking required files..."
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing required file: $file"
+              exit 1
+            fi
+            echo "✓ $file exists"
+          done
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          for json_file in .claude/*.json .cursor/*.json; do
+            if [ -f "$json_file" ]; then
+              if ! jq empty "$json_file" 2>/dev/null; then
+                echo "ERROR: Invalid JSON in $json_file"
+                exit 1
+              fi
+              echo "✓ $json_file is valid JSON"
+            fi
+          done
+
+      - name: Check symlinks
+        run: |
+          echo "Checking symlinks..."
+          if [ -L ".cursor/skills" ]; then
+            target=$(readlink ".cursor/skills")
+            if [ "$target" = "../.claude/skills" ]; then
+              echo "✓ .cursor/skills symlink is correct"
+            else
+              echo "WARNING: .cursor/skills points to $target (expected ../.claude/skills)"
+            fi
+          else
+            echo "WARNING: .cursor/skills is not a symlink"
+          fi
+
+      - name: Run setup script (dry run)
+        run: |
+          echo "Running setup script..."
+          ./.claude/scripts/setup.sh

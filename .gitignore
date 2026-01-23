@@ -1,0 +1,49 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Node modules (if users add package.json)
+node_modules/
+
+# Python (if users add Python)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Claude Code / Cursor cache
+.claude-cache/
+.cursor-cache/
+
+# Local settings (users should create their own)
+.claude/settings.local.json

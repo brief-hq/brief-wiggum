@@ -1,5 +1,9 @@
 # Brief Wiggum
 
+[![Validate](https://github.com/Mocksi/brief-wiggum/actions/workflows/validate.yml/badge.svg)](https://github.com/Mocksi/brief-wiggum/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Status: Experimental](https://img.shields.io/badge/Status-Experimental-orange.svg)](#disclaimer)
+
 **Open Source AI Agent Harness for Brief Users**
 
 > ⚠️ **EXPERIMENTAL**: This project is in early development and provided "as-is" without warranty. Use at your own risk. The configuration patterns, hooks, and scripts may change significantly between releases. We recommend testing thoroughly in a non-production environment before adopting for critical workflows.
@@ -75,6 +79,7 @@ Slash commands for common workflows:
 | `/design-audit` | Audit for design system compliance |
 | `/design-polish` | Refine component to use Brief tokens |
 | `/joust-rabbit` | Process PR review comments |
+| `/peer-review` | Multi-model code review (OpenAI, Gemini) |
 
 ### Agent Personas
 
@@ -93,6 +98,8 @@ Specialized agents for complex tasks:
 - **Brief MCP**: Connect to your Brief workspace ([setup guide](docs/brief-mcp-setup.md))
 - **Claude Code** or **Cursor**: AI-assisted development environment
 - **pnpm/npm/yarn**: For running build commands
+- **jq**: For Ralph loop and scripts (`brew install jq` or `apt install jq`)
+- **Optional**: `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for `/peer-review`
 
 ## Documentation
 
@@ -122,6 +129,10 @@ See the `examples/` directory for stack-specific configurations:
 - Configuration patterns may change significantly between versions
 
 Always maintain proper backups and test in isolated environments before using with important projects.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 

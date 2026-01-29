@@ -93,7 +93,7 @@ if [[ $ERRORS -eq 0 ]]; then
   echo -e "${BLUE}Next steps:${NC}"
   echo "  1. Copy CLAUDE.md.template to CLAUDE.md"
   echo "  2. Customize the Architecture section for your project"
-  echo "  3. Connect Brief MCP (see docs/brief-mcp-setup.md)"
+  echo "  3. Connect Brief MCP (see https://briefhq.ai/docs/mcp-setup/)"
   echo "  4. Run: claude (or open in Cursor)"
   echo "  5. Type: /onboard"
   echo ""

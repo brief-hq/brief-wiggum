@@ -32,7 +32,7 @@ This verifies:
 
 ## Step 3: Connect Brief MCP
 
-See [brief-mcp-setup.md](brief-mcp-setup.md) for detailed instructions.
+See [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) for detailed instructions.
 
 **Quick version for Claude Code:**
 

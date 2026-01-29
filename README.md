@@ -12,7 +12,7 @@ Brief Wiggum provides an AI agent configuration for Claude Code and Cursor that 
 
 ## Quick Start
 
-> **Prerequisite**: You need Brief MCP connected to your AI editor. See [docs/brief-mcp-setup.md](docs/brief-mcp-setup.md) for setup.
+> **Prerequisite**: You need Brief MCP connected to your AI editor. See [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) for setup.
 
 1. Fork this repository
 2. Connect Brief MCP in your Claude Code or Cursor settings
@@ -93,7 +93,7 @@ Brief Wiggum follows these principles:
 
 ## Requirements
 
-- **Brief MCP**: Connect to your Brief workspace ([setup guide](docs/brief-mcp-setup.md))
+- **Brief MCP**: Connect to your Brief workspace ([setup guide](https://briefhq.ai/docs/mcp-setup/))
 - **Claude Code** or **Cursor**: AI-assisted development environment
 - **pnpm/npm/yarn**: For running build commands
 - **Optional**: `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for `/peer-review`
@@ -103,7 +103,7 @@ Brief Wiggum follows these principles:
 | Doc | Description |
 |-----|-------------|
 | [Quick Start](docs/quick-start.md) | 5-minute setup guide |
-| [Brief MCP Setup](docs/brief-mcp-setup.md) | Connect Brief to your editor |
+| [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) | Connect Brief to your editor |
 | [Philosophy](docs/philosophy.md) | Ralph Wiggum methodology |
 | [Platform Support](docs/platform-support.md) | Claude Code vs Cursor |
 | [Customization](docs/customization.md) | Adapt for your stack |

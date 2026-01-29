@@ -6,7 +6,7 @@ description: Run task in iterative Ralph Wiggum Loop until verification passes
 
 > "I'm helping!" - Ralph Wiggum
 
-Run a task in an iterative loop until completion criteria are met. Named after the [Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum) pattern.
+Run a task in an iterative loop until completion criteria are met. Named after the [Ralph Wiggum Loop](https://ghuntley.com/ralph/) pattern.
 
 **This is an INTELLIGENT loop** - it leverages the entire Brief infrastructure:
 - **Skills**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
@@ -67,7 +67,7 @@ Run from terminal outside Claude Code:
 
 ## Core Philosophy
 
-From the [Ralph Wiggum methodology](https://awesomeclaude.ai/ralph-wiggum):
+From the [Ralph Wiggum methodology](https://ghuntley.com/ralph/):
 
 1. **Iteration over perfection** - Refinement matters more than first-attempt quality
 2. **Failures as data** - Predictable failures reveal what guardrails to add

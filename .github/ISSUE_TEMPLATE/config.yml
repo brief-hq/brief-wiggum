@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Questions & Discussion
-    url: https://github.com/Mocksi/brief-wiggum/discussions
+    url: https://github.com/brief-hq/brief-wiggum/discussions
     about: Ask questions and discuss Brief Wiggum
   - name: Brief Documentation
     url: https://docs.briefhq.ai

@@ -10,7 +10,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ### Reporting Bugs
 
-1. **Check existing issues** - Search [GitHub Issues](https://github.com/Mocksi/brief-wiggum/issues) to see if the bug has already been reported.
+1. **Check existing issues** - Search [GitHub Issues](https://github.com/brief-hq/brief-wiggum/issues) to see if the bug has already been reported.
 2. **Create a new issue** - Use the bug report template and include:
    - Clear description of the problem
    - Steps to reproduce
@@ -73,7 +73,7 @@ cd brief-wiggum
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/Mocksi/brief-wiggum/discussions)
+- Open a [Discussion](https://github.com/brief-hq/brief-wiggum/discussions)
 - Check the [docs/](docs/) directory
 
 ## License

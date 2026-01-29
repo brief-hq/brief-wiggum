@@ -37,7 +37,7 @@ Check if bots are still analyzing:
 
 ```bash
 # Get the latest CodeRabbit and Cubic issue comments
-gh api /repos/Mocksi/brief/issues/{number}/comments | \
+gh api /repos/brief-hq/brief/issues/{number}/comments | \
   jq '[.[] | select(.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]")] | last | .body' | head -5
 ```
 
@@ -53,11 +53,11 @@ gh pr view {number} --json commits --jq '.commits[-1] | "\(.oid) \(.committedDat
 Then check if the bots' latest reviews are AFTER this commit:
 ```bash
 # Get CodeRabbit's walkthrough comment timestamp
-gh api /repos/Mocksi/brief/issues/{number}/comments | \
+gh api /repos/brief-hq/brief/issues/{number}/comments | \
   jq '[.[] | select(.user.login == "coderabbitai[bot]" and (.body | contains("Walkthrough")))] | last | .updated_at'
 
 # Get Cubic's latest review comment timestamp
-gh api /repos/Mocksi/brief/issues/{number}/comments | \
+gh api /repos/brief-hq/brief/issues/{number}/comments | \
   jq '[.[] | select(.user.login == "cubic-dev-ai[bot]")] | last | .updated_at'
 ```
 
@@ -67,7 +67,7 @@ gh api /repos/Mocksi/brief/issues/{number}/comments | \
 
 ```bash
 # Poll every 30 seconds, timeout after 5 minutes
-gh api /repos/Mocksi/brief/pulls/{number}/comments | \
+gh api /repos/brief-hq/brief/pulls/{number}/comments | \
   jq '[.[] | select(.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]")]'
 ```
 
@@ -75,7 +75,7 @@ gh api /repos/Mocksi/brief/pulls/{number}/comments | \
 1. Parse wait time from message (e.g., "wait 16 minutes and 56 seconds")
 2. Report: "CodeRabbit rate limited. Waiting ~17 minutes..."
 3. Sleep for wait time + 1-minute buffer
-4. Trigger re-review: `gh api /repos/Mocksi/brief/issues/{number}/comments -f body="@coderabbitai review"`
+4. Trigger re-review: `gh api /repos/brief-hq/brief/issues/{number}/comments -f body="@coderabbitai review"`
 5. Resume polling
 
 **Cubic Rate Limit Handling**: Cubic has different limits:
@@ -93,10 +93,10 @@ If Cubic posts "quota exceeded" or similar:
 ### 3. Fetch All Review Comments
 ```bash
 # Code-level review comments (both bots + humans)
-gh api /repos/Mocksi/brief/pulls/{number}/comments
+gh api /repos/brief-hq/brief/pulls/{number}/comments
 
 # PR-level issue comments
-gh api /repos/Mocksi/brief/issues/{number}/comments
+gh api /repos/brief-hq/brief/issues/{number}/comments
 ```
 
 ### 4. Categorize by Source
@@ -205,7 +205,7 @@ Bad examples (too long):
 
 ```bash
 # Reply to a review comment
-gh api /repos/Mocksi/brief/pulls/{number}/comments/{comment_id}/replies \
+gh api /repos/brief-hq/brief/pulls/{number}/comments/{comment_id}/replies \
   -f body="Fixed - staged"
 ```
 
@@ -215,7 +215,7 @@ After replying, bots may respond with corrections or follow-up questions. Check 
 
 ```bash
 # Fetch replies to find bot counter-replies
-gh api /repos/Mocksi/brief/pulls/{number}/comments | \
+gh api /repos/brief-hq/brief/pulls/{number}/comments | \
   jq '[.[] | select(.in_reply_to_id != null and (.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]"))]'
 ```
 

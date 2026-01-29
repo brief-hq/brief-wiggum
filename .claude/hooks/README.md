@@ -4,10 +4,7 @@ This directory contains hooks that intercept Claude Code tool calls for safety a
 
 ## How Hooks Work
 
-Claude Code supports two hook types:
-
-1. **PreToolUse** - Runs before a tool executes. Can block execution by returning exit code 2.
-2. **Stop** - Runs when the agent attempts to stop. Can prevent stopping to keep the agent working.
+Claude Code supports **PreToolUse** hooks that run before a tool executes. They can block execution by returning exit code 2.
 
 Hooks receive context via environment variables:
 - `CLAUDE_TOOL_INPUT` - JSON containing the tool's parameters
@@ -32,19 +29,6 @@ Blocks dangerous git operations before they execute:
 | `git rebase` | History rewriting | Use `git merge` |
 | `git branch -D` | Force delete branch | Use `git branch -d` |
 
-### verify-complete.sh
-
-**Type**: Stop hook
-
-Prevents the agent from stopping until verification passes. Opt-in via environment variables:
-
-```bash
-export RALPH_VERIFY=1
-export RALPH_VERIFY_TYPE=all  # Options: all, tests, lint, typecheck, quick, build
-```
-
-This enables the "Ralph Wiggum Loop" - the agent keeps working until code quality gates pass.
-
 ## Configuration
 
 Hooks are configured in `.claude/settings.json`:
@@ -56,12 +40,6 @@ Hooks are configured in `.claude/settings.json`:
       {
         "matcher": "Bash",
         "hooks": [{ "type": "command", "command": ".claude/hooks/git-guard.sh" }]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [{ "type": "command", "command": ".claude/hooks/verify-complete.sh" }]
       }
     ]
   }
@@ -78,7 +56,7 @@ Hooks are configured in `.claude/settings.json`:
 ## Exit Codes
 
 - `0` - Allow the operation
-- `2` - Block the operation (for PreToolUse) or prevent stopping (for Stop)
+- `2` - Block the operation
 
 When blocking, output JSON to stderr:
 ```json

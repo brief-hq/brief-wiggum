@@ -23,8 +23,6 @@ Run a task in an iterative loop until completion criteria are met. Named after t
 5. **Escalation**: At iteration 3, agent is warned to question the approach
 6. **Success**: When verification passes, optionally runs full /prep
 
-## Two Modes
-
 ## Automatic Skill Detection
 
 The loop analyzes your task and loads relevant skills:
@@ -41,7 +39,7 @@ The loop analyzes your task and loads relevant skills:
 
 **Always loaded**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
 
-### 1. External Loop (ralph.sh)
+## Usage
 
 Run from terminal outside Claude Code:
 
@@ -66,28 +64,6 @@ Run from terminal outside Claude Code:
 - `--no-resume` - Start fresh each iteration
 - `--verbose` - Show full claude output
 - `--dry-run` - Preview without executing
-
-### 2. Stop Hook (Interactive Mode)
-
-Enable verification gating in an interactive Claude Code session:
-
-```bash
-# Enable Ralph mode for current session
-export RALPH_VERIFY=1
-export RALPH_VERIFY_TYPE=all  # or: tests, lint, typecheck, quick
-
-# Now run claude normally
-claude
-```
-
-With `RALPH_VERIFY=1`, Claude cannot stop until verification passes. The Stop hook intercepts completion attempts and blocks if checks fail.
-
-**RALPH_VERIFY_TYPE options:**
-- `tests` - Just run tests
-- `lint` - Just run lint
-- `typecheck` - Just run typecheck
-- `quick` - Lint + typecheck (faster than full tests)
-- `all` - Tests + lint + typecheck (default)
 
 ## Core Philosophy
 
@@ -212,20 +188,6 @@ At **iteration 3**, the agent receives explicit instructions to:
 # 6. Run full /prep checklist before done
 ```
 
-### Interactive Mode with Stop Hook
-
-```bash
-# Agent cannot stop until verification passes
-export RALPH_VERIFY=1
-export RALPH_VERIFY_TYPE=all
-claude
-
-# In the session, the agent:
-# - Will be blocked from stopping if tests fail
-# - Must fix issues before session can end
-# - Gets debugging methodology on failures
-```
-
 ### Quick Iteration for Refactoring
 
 ```bash
@@ -264,12 +226,6 @@ claude
 - Task may be too complex - break it down
 - Prompt may be ambiguous - be more specific
 - May need human guidance - reduce max iterations and review
-
-### Stop Hook Not Blocking
-
-- Verify `RALPH_VERIFY=1` is set in the current shell
-- Check that `verify-complete.sh` is executable
-- Run `claude --debug hooks` to see hook execution
 
 ## References
 

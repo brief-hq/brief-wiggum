@@ -155,17 +155,6 @@
           }
         ]
       }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/verify-complete.sh"
-          }
-        ]
-      }
     ]
   }
 }

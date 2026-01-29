@@ -95,5 +95,7 @@ jobs:
 
       - name: Run setup script (dry run)
         run: |
+          # Ensure executable bits are set (checkout may not preserve them)
+          chmod +x .claude/hooks/*.sh .claude/scripts/*.sh
           echo "Running setup script..."
           ./.claude/scripts/setup.sh

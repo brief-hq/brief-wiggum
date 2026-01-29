@@ -83,7 +83,7 @@ Specialized agents for complex tasks:
 
 Brief Wiggum follows these principles:
 
-1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files, not session history. This keeps the AI in its "smart zone" ([why this matters](https://www.aihero.dev/blog/posts/why-the-anthropic-ralph-plugin-sucks)).
+1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files and Brief MCP (product context, decisions), not session history. This keeps the AI in its "smart zone" where it performs best.
 
 2. **Simplicity over configuration** - Four principles in CLAUDE.md, not 200 lines of rules.
 
@@ -137,4 +137,14 @@ MIT License - see [LICENSE](LICENSE)
 
 ---
 
-Named after the [Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum) pattern for iterative AI agent execution.
+## Prior Art
+
+Named after the Ralph Wiggum Loop pattern for iterative AI agent execution.
+
+- [Original Ralph Wiggum](https://ghuntley.com/ralph/) - Greg Huntley's foundational work
+- [Boris Cherney's thread](https://x.com/bcherny/status/2007179858435281082) - Early exploration of the pattern
+- [Claude Code Ralph Plugin](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) - Anthropic's official plugin
+- [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) - Anthropic engineering blog
+- [Ralph Wiggum Best Practices](https://www.youtube.com/watch?v=eAtvoGlpeRU) - Bash loop vs plugin comparison
+- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent) - Production implementation
+- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop) - Origins and methodology

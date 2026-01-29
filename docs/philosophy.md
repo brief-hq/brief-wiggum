@@ -8,7 +8,7 @@
 
 The Ralph Wiggum Loop is named after the Simpsons character known for his earnest but often misguided attempts to help. Like Ralph, AI agents are eager to assist but sometimes need multiple attempts and gentle guidance to get things right.
 
-The pattern was popularized by [awesomeclaude.ai](https://awesomeclaude.ai/ralph-wiggum) and implemented by teams at Vercel and others.
+The pattern emerged from the AI agent community, with foundational work from [Greg Huntley](https://ghuntley.com/ralph/) and was implemented by teams at Vercel and others.
 
 ## Core Principles
 
@@ -217,6 +217,10 @@ After each run, check `~/.claude/ralph-state/`:
 
 ## References
 
-- [Original Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum)
-- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent)
-- [Dev Interrupted Podcast Episode](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop)
+- [Original Ralph Wiggum](https://ghuntley.com/ralph/) - Greg Huntley's foundational work
+- [Boris Cherney's thread](https://x.com/bcherny/status/2007179858435281082) - Early exploration
+- [Claude Code Ralph Plugin](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) - Anthropic's official plugin
+- [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) - Anthropic engineering blog
+- [Ralph Wiggum Best Practices](https://www.youtube.com/watch?v=eAtvoGlpeRU) - Bash loop vs plugin comparison
+- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent) - Production implementation
+- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop) - Origins and methodology

@@ -80,6 +80,28 @@ The loop handles this automatically.
                                     └──────► (back to AGENT ATTEMPT)
 ```
 
+## Context Window Management
+
+### The Smart Zone Problem
+
+LLMs have a "smart zone" (first ~40% of context) and a "dumb zone" (remaining context). As the context fills, the model makes worse decisions.
+
+This is why **fresh context per iteration** is essential:
+
+| Approach | Context After 5 Iterations | Quality |
+|----------|---------------------------|---------|
+| Same session (plugin) | ~80% full, dumb zone | Degraded |
+| Fresh session (bash loop) | ~15% full, smart zone | Optimal |
+
+### How Ralph Maintains Fresh Context
+
+1. Each `ralph.sh` iteration spawns a new Claude session
+2. Context carries via files (`.ralph/plan.md`, `.ralph/activity.md`), not session history
+3. Git history provides implicit context about what changed
+4. The LLM always operates in its smart zone
+
+This is why we removed the Stop Hook mode—it kept everything in one session, causing the exact context pollution that degrades AI performance.
+
 ## Why It Works
 
 ### Automatic Error Correction

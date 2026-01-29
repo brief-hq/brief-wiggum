@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Questions & Discussion
-    url: https://github.com/Mocksi/brief-wiggum/discussions
-    about: Ask questions and discuss Brief Wiggum
-  - name: Brief Documentation
-    url: https://docs.briefhq.ai
-    about: Learn more about Brief and Brief MCP

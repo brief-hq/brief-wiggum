@@ -1,6 +1,6 @@
 # Brief Wiggum
 
-[![Validate](https://github.com/Mocksi/brief-wiggum/actions/workflows/validate.yml/badge.svg)](https://github.com/Mocksi/brief-wiggum/actions/workflows/validate.yml)
+[![Validate](https://github.com/brief-hq/brief-wiggum/actions/workflows/validate.yml/badge.svg)](https://github.com/brief-hq/brief-wiggum/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Experimental](https://img.shields.io/badge/Status-Experimental-orange.svg)](#disclaimer)
 
@@ -26,14 +26,8 @@ Brief Wiggum provides an AI agent configuration for Claude Code and Cursor that 
 Keep your agent working until verification passes:
 
 ```bash
-# External loop
 ./.claude/scripts/ralph.sh "Implement feature X with tests"
 ./.claude/scripts/ralph.sh --linear BRI-123 "Fix the bug"
-
-# Or enable Stop hook for interactive sessions
-export RALPH_VERIFY=1
-export RALPH_VERIFY_TYPE=all  # tests|lint|typecheck|quick|all
-claude
 ```
 
 ### Git Safety Guards
@@ -51,18 +45,11 @@ Modular skills in `.claude/skills/` loaded on demand:
 
 | Skill | Purpose |
 |-------|---------|
-| `brief-context` | Load Brief business context |
-| `brief-patterns` | API routes, database, components |
-| `brief-design` | Design system, typography, colors |
-| `decision-guard` | Validate against Brief decisions |
-| `tdd` | Test-driven development workflow |
-| `debugging` | Systematic root cause analysis |
-| `testing-strategy` | Coverage requirements |
-| `security-patterns` | Auth, RLS, validation |
-| `visual-testing` | Playwright-based UI verification |
-| `mcp-development` | MCP tool development patterns |
-| `chrome-extension` | Extension development |
-| `writing-skills` | Meta-skill for creating skills |
+| `development` | TDD, debugging, testing |
+| `patterns` | API, database, security |
+| `brief-design` | Design system |
+| `extensions` | Chrome, MCP |
+| `visual-testing` | Playwright |
 
 ### Commands
 
@@ -76,8 +63,7 @@ Slash commands for common workflows:
 | `/health` | Check environment |
 | `/ralph` | Run iterative loop |
 | `/todo-all` | Execute all pending todos |
-| `/design-audit` | Audit for design system compliance |
-| `/design-polish` | Refine component to use Brief tokens |
+| `/design` | Design system compliance and polish |
 | `/joust-rabbit` | Process PR review comments |
 | `/peer-review` | Multi-model code review (OpenAI, Gemini) |
 
@@ -93,12 +79,23 @@ Specialized agents for complex tasks:
 | `pr-preparer` | Pre-commit validation |
 | `code-explorer` | Codebase navigation |
 
+## Philosophy
+
+Brief Wiggum follows these principles:
+
+1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files, not session history. This keeps the AI in its "smart zone" ([why this matters](https://www.aihero.dev/blog/posts/why-the-anthropic-ralph-plugin-sucks)).
+
+2. **Simplicity over configuration** - Four principles in CLAUDE.md, not 200 lines of rules.
+
+3. **Goal-driven execution** - Define success criteria (tests pass, types check), let the agent loop until verified.
+
+4. **Business context injection** - Brief MCP provides product strategy, decisions, and customer insights so AI doesn't just write code—it writes the right code.
+
 ## Requirements
 
 - **Brief MCP**: Connect to your Brief workspace ([setup guide](docs/brief-mcp-setup.md))
 - **Claude Code** or **Cursor**: AI-assisted development environment
 - **pnpm/npm/yarn**: For running build commands
-- **jq**: For Ralph loop and scripts (`brew install jq` or `apt install jq`)
 - **Optional**: `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for `/peer-review`
 
 ## Documentation

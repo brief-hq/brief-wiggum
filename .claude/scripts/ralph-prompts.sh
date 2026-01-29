@@ -450,33 +450,29 @@ check_plan_complete() {
 }
 
 # Enhanced skill detection (kept for logging purposes)
+# Skills consolidated: development (tdd+debugging+testing), patterns (api+security), brief-design, extensions, visual-testing
 detect_task_skills() {
   local task="$1"
   local skills=""
 
   # API/backend work
   if echo "$task" | grep -qiE "api|route|endpoint|backend|database|query|drizzle|supabase"; then
-    skills="$skills brief-patterns security-patterns"
+    skills="$skills patterns"
   fi
 
   # Frontend/UI work
   if echo "$task" | grep -qiE "component|ui|frontend|page|button|form|modal|design|panel|card|dialog|table|list"; then
-    skills="$skills vercel-react-best-practices brief-design"
+    skills="$skills brief-design"
   fi
 
-  # Bug fixes
-  if echo "$task" | grep -qiE "bug|fix|error|broken|failing|issue|debug"; then
-    skills="$skills debugging"
+  # Bug fixes, new features, tests -> development skill (TDD + debugging + testing-strategy)
+  if echo "$task" | grep -qiE "bug|fix|error|broken|failing|issue|debug|add|implement|create|new|feature|build|test|coverage|spec|vitest"; then
+    skills="$skills development"
   fi
 
-  # New features
-  if echo "$task" | grep -qiE "add|implement|create|new|feature|build"; then
-    skills="$skills tdd"
-  fi
-
-  # Tests
-  if echo "$task" | grep -qiE "test|coverage|spec|vitest"; then
-    skills="$skills testing-strategy"
+  # Extension/MCP work
+  if echo "$task" | grep -qiE "extension|chrome|mcp|tool"; then
+    skills="$skills extensions"
   fi
 
   # Visual testing (when --visual-check is enabled)

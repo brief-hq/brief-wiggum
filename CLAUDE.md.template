@@ -1,222 +1,73 @@
-# Brief AI Agent Setup
+# [PROJECT_NAME] AI Agent Setup
 
-<!-- Generated from Brief Wiggum (experimental). See https://github.com/Mocksi/brief-wiggum -->
+<!-- Generated from Brief Wiggum. See https://github.com/brief-hq/brief-wiggum -->
 
-## Quick Start
+## Principles
 
-- Run `/onboard` to load Brief context and report readiness
-- Run `/onboard BRI-XXX` for specific Linear task with auto-generated todos
-- All agents have access to Brief MCP for business context
-
-## Context Loading Order
-
-When `/onboard [BRI-XXX]` runs, context is loaded in this order:
-
-### 1. Brief MCP (mcp__brief__brief_get_onboarding_context)
-- **Product**: customers, service definition, competitive advantages
-- **Personas**: top user types with needs and pain points
-- **Strategic context**: 6-month goal, top metrics
-- **Current work**: building, committed items
-- **Velocity & team**: release frequency, decision speed, technical sophistication
-- **Recent decisions**: last 10 architectural/business decisions
-- **Customer insights**: themes, sentiment
-
-### 2. Linear Task Context (if BRI-XXX provided)
-- **Issue**: title, description, acceptance criteria
-- **Relations**: blocks, blocked by, related issues
-- **Linked Brief documents** (if any)
-- **Project context**
-
-### 3. Repository Rules (AGENTS.md, .brief/brief-guidelines.md)
-- Hard rules (never commit --amend, etc.)
-- Code conventions
-- Testing requirements
-
-### 4. Domain Skills (.claude/skills/, .cursor/skills/)
-- **brief-patterns**: API routes, MCP integration, database, testing, design system
-- **testing-strategy**: Coverage requirements, test patterns
-- **mcp-development**: Tool development patterns
-- **decision-guard**: Check approaches against Brief decisions
-- **chrome-extension**: Chrome extension development, shared components
-- **security-patterns**: Brief-specific security patterns and guidelines
-
-### 5. Codebase Structure (Explore agent, lazy-loaded)
-- File organization
-- Existing patterns
-- Dependencies and relationships
-
-**This layered context enables informed, constraint-aware development from session start.**
+1. **Think Before Coding** - Surface confusion, don't assume. If uncertain, ask.
+2. **Simplicity First** - Minimum code that solves the problem. No speculation.
+3. **Surgical Changes** - Touch only what you must. Don't "improve" adjacent code.
+4. **Goal-Driven Execution** - Define success criteria, loop until verified.
 
 ## Hard Rules
 
 ### Blocked Operations
 
-**Git History Modification (Destructive)**
-- ❌ `git commit --amend` - Rewrites commit history
-- ❌ `git push --force` / `git push -f` - Overwrites remote history
-- ❌ `git rebase` - Rewrites commit history
-- ❌ `git reset` (any form: --soft, --mixed, --hard) - Moves HEAD, can lose commits
+- `git commit --amend`, `push --force`, `rebase`, `reset` (history modification)
+- `git checkout .`, `restore`, `clean -f` (work destruction)
+- `git push` to main/master/production directly (use PRs)
+- `git branch -D` (force delete - use `-d` instead)
 
-**Git Work Destruction**
-- ❌ `git checkout --ours` / `git checkout --theirs` - Discards conflict resolution options
-- ❌ `git checkout .` - Discards all unstaged changes
-- ❌ `git restore` (except `--staged`) - Discards working tree changes
-- ❌ `git clean -f` / `git clean -fd` - Deletes untracked files permanently
-- ❌ `git stash drop` / `git stash clear` - Destroys stashed work
+### Required Behaviors
 
-**Git Branch Operations**
-- ❌ `git push` to main/master/production directly - Use PRs instead
-- ❌ `git branch -D` - Force deletes branch regardless of merge status
-
-**Required Behaviors**
-- ✅ **ALWAYS**: Run lint, test, typecheck, build before commit/push
-- ✅ **ALWAYS**: Use Brief MCP for context before making architectural decisions
-- ✅ **ALWAYS**: Check Brief decisions with guard_approach before implementing architectural changes
-- ❌ **NEVER**: commit/push without explicit approval (EXCEPTION: /prep command IS the approval)
-
-### Enforcement Layers
-
-Rules are enforced through multiple layers, from advisory to hard blocks:
-
-| Layer | Type | Bypassable | Platform |
-|-------|------|------------|----------|
-| **CLAUDE.md / AGENTS.md** | Advisory | Yes (agent discretion) | Both |
-| **Husky git hooks** | Pre-commit/push | Yes (`--no-verify`) | Both |
-| **permissions.deny** | Static block | No | Cursor only |
-| **PreToolUse hooks** | Runtime block | No | Claude Code only |
-
-### When You Get Blocked
-
-If a command is blocked by enforcement layers:
-
-1. **Read the error message** - It explains why the operation is blocked
-2. **Use the safe alternative** - The message often suggests what to do instead
-3. **Ask for user approval** - If the operation is truly necessary, explain why and get explicit approval
-
-**Safe Alternatives:**
-
-| Blocked Operation | Safe Alternative |
-|-------------------|------------------|
-| `git commit --amend` | Create a new commit with the fix |
-| `git push --force` | Create a new commit, push normally |
-| `git reset --hard` | `git stash` to save work, then proceed |
-| `git checkout .` | `git stash` or commit work first |
-| `git clean -fd` | Manually review and delete specific files |
-| `git branch -D` | `git branch -d` (safe delete, checks merge status) |
-| `git push origin main` | Create PR branch, push there, open PR |
-| `git rebase` | Use merge commits instead |
-
-### Platform Differences
-
-| Feature | Claude Code | Cursor |
-|---------|-------------|--------|
-| Runtime command interception | PreToolUse hooks | Not available |
-| Static command blocking | Not used | permissions.deny |
-| Advisory rules | CLAUDE.md | .cursorrules |
-| Git hooks | Husky (shared) | Husky (shared) |
-
-Both platforms share the same Husky git hooks and advisory rules.
-
-## Architecture Overview
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     CUSTOMIZE THIS SECTION FOR YOUR PROJECT
-     Replace the placeholders below with your actual stack details
-     ═══════════════════════════════════════════════════════════════════════ -->
-
-**[YOUR_PROJECT_NAME]** uses the following stack:
-
-- **Frontend**: [YOUR_FRONTEND_FRAMEWORK] (e.g., React, Next.js, Vue, Svelte)
-- **Backend**: [YOUR_BACKEND] (e.g., Next.js API routes, Express, FastAPI, Rails)
-- **Database**: [YOUR_DATABASE] (e.g., PostgreSQL, MongoDB, MySQL)
-- **ORM**: [YOUR_ORM] (e.g., Drizzle, Prisma, SQLAlchemy, TypeORM)
-- **Auth**: [YOUR_AUTH] (e.g., Clerk, Auth0, NextAuth, Supabase Auth)
-- **Build System**: [YOUR_BUILD] (e.g., Turborepo, nx, plain npm/pnpm)
-- **Deployment**: [YOUR_DEPLOYMENT] (e.g., Vercel, Render, AWS, Railway)
-
-### Commands
-
-```bash
-[YOUR_DEV_COMMAND]        # Start dev server (e.g., pnpm dev, npm run dev)
-[YOUR_BUILD_COMMAND]      # Build the project (e.g., pnpm build)
-[YOUR_TEST_COMMAND]       # Run tests (e.g., pnpm test)
-[YOUR_LINT_COMMAND]       # Lint code (e.g., pnpm lint)
-[YOUR_TYPECHECK_COMMAND]  # Typecheck (e.g., pnpm typecheck)
-```
-
-## Code Conventions
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     CUSTOMIZE THIS SECTION FOR YOUR PROJECT
-     Document your team's specific patterns and conventions
-     ═══════════════════════════════════════════════════════════════════════ -->
-
-### API Routes
-- Location: `[YOUR_API_PATH]` (e.g., app/api/v1/[resource]/route.ts)
-- Validation: [YOUR_VALIDATION_LIB] (e.g., Zod, Yup, Joi)
-- Auth middleware: [YOUR_AUTH_PATTERN]
-- Error handling: [YOUR_ERROR_PATTERN]
-
-### Database
-- ORM: [YOUR_ORM]
-- Migrations: [YOUR_MIGRATION_TOOL]
-- Connection: [YOUR_DB_CLIENT]
-
-### Testing
-- Framework: [YOUR_TEST_FRAMEWORK] (e.g., Vitest, Jest, pytest)
-- Coverage: [YOUR_COVERAGE_REQUIREMENT] (e.g., 80% for new code)
-- Mocking: [YOUR_MOCK_PATTERNS]
-
-### File Organization
-- API routes: [YOUR_API_STRUCTURE]
-- Components: [YOUR_COMPONENT_STRUCTURE]
-- Utilities: [YOUR_UTILS_STRUCTURE]
-- Types: [YOUR_TYPES_STRUCTURE]
-
-## Agent Capabilities
-
-### context-loader
-Brief + Linear + codebase discovery. Loads all context layers and reports readiness.
-
-### task-planner
-Implementation planning with Brief context. Uses guard_approach to check against decisions.
-
-### implementation
-Autonomous coding with permission gates. Follows Brief patterns, writes tests, updates docs.
-
-### pr-preparer
-Pre-commit validation. Runs full checklist (logging, tests, file size, docs, lint, typecheck, build).
-
-### code-explorer
-Codebase navigation using Explore agent. Answers "where is X?" efficiently.
+- Run tests, lint, typecheck before commits
+- Use Brief MCP for context before architectural decisions
+- Call `guard_approach` before architectural changes
+- Never commit without explicit approval (exception: `/prep` IS the approval)
 
 ## Brief MCP Integration
 
-- **Product context**: Auto-loaded via mcp__brief tools on /onboard
-- **Recent decisions**: Automatically retrieved, checked via guard_approach
-- **Active work**: Synced from Linear
-- **Constraints**: In Brief documents, queryable on demand
-- **Decision conflicts**: Validated before architectural changes
+Load context with `/onboard`. The agent receives:
+- Product context (service, customers, competitive advantages)
+- Recent decisions with rationale
+- Current work from Linear
+- Customer insights and personas
 
-## Branch Naming
+Use `guard_approach` before architectural changes to check against team decisions.
 
-- Get branch name from Linear issue via `mcp__linear-server__get_issue`
-- Linear provides a `branchName` field (e.g., `{username}/bri-{issue_id}-{description}`)
-- Use Linear's suggested name for consistency with team conventions
-- If no Linear issue, manually create: `{username}/bri-{issue_id}-{description}`
+## Commands
 
-## Workflow Commands
+| Command | Purpose |
+|---------|---------|
+| `/onboard` | Load Brief + Linear context, report readiness |
+| `/onboard BRI-XXX` | Load specific Linear issue with auto-generated todos |
+| `/prep` | Pre-commit validation (lint, test, typecheck, build) |
+| `/ralph` | Iterative loop until verification passes |
+| `/design` | Design system tools and component patterns |
 
-- `/onboard` - Load context and prepare for work
-- `/onboard BRI-XXX` - Load specific Linear task with auto-generated todos
-- `/todo-all` - Execute all pending todos autonomously with permission gates
-- `/prep` - Validate code quality + security checks, then commit and push
-- `/health` - Check agent environment health
+## Project Configuration
 
-## Platform Support
+<!-- Customize below for your stack -->
 
-This setup works with both **Claude Code** and **Cursor**:
+**Stack**: [YOUR_STACK]
 
-- Claude Code: Uses CLAUDE.md, native TodoWrite, built-in agents
-- Cursor: Uses .cursorrules, composer mode, @-mentions
-- Commands, skills, and agents are shared via symlinks
+```bash
+# Commands
+pnpm dev        # Start dev server
+pnpm build      # Build project
+pnpm test       # Run tests
+pnpm lint       # Lint code
+pnpm typecheck  # Type check
+```
+
+### File Organization
+
+- API routes: `[YOUR_API_PATH]`
+- Components: `[YOUR_COMPONENT_PATH]`
+- Utilities: `[YOUR_UTILS_PATH]`
+- Types: `[YOUR_TYPES_PATH]`
+
+### Branch Naming
+
+Get branch name from Linear issue (`branchName` field) or create manually:
+`{username}/bri-{issue_id}-{description}`

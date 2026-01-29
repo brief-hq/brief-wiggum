@@ -230,7 +230,9 @@ At **iteration 3**, the agent receives explicit instructions to:
 ## References
 
 - [Original Ralph Wiggum](https://ghuntley.com/ralph/) - Greg Huntley's foundational work
+- [Boris Cherney's thread](https://x.com/bcherny/status/2007179858435281082) - Early exploration of the pattern
 - [Claude Code Ralph Plugin](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) - Anthropic's official plugin
 - [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) - Anthropic engineering blog
 - [Ralph Wiggum Best Practices](https://www.youtube.com/watch?v=eAtvoGlpeRU) - Bash loop vs plugin comparison
 - [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent) - Production implementation
+- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop) - Origins and methodology

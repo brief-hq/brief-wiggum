@@ -115,10 +115,10 @@ DRIZZLE_DATABASE_URL="..." pnpm db:drizzle:migrate
 
 **Migration Types:**
 
-| Type | Use For | Command |
-|------|---------|---------|
-| Generated | Columns, tables, indexes, constraints | `pnpm db:drizzle:generate` |
-| Custom | Functions, triggers, extensions, data migrations | `pnpm db:drizzle:generate --custom --name=description` |
+| Type      | Use For                                          | Command                                                |
+|-----------|--------------------------------------------------|--------------------------------------------------------|
+| Generated | Columns, tables, indexes, constraints            | `pnpm db:drizzle:generate`                             |
+| Custom    | Functions, triggers, extensions, data migrations | `pnpm db:drizzle:generate --custom --name=description` |
 
 ---
 

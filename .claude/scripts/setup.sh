@@ -22,7 +22,7 @@ ERRORS=0
 
 # Check 1: Git hooks are executable
 echo -e "${BLUE}Checking git hooks...${NC}"
-if [[ -x ".claude/hooks/git-guard.sh" ]] && [[ -x ".claude/hooks/verify-complete.sh" ]]; then
+if [[ -x ".claude/hooks/git-guard.sh" ]]; then
   echo -e "  ${GREEN}✓${NC} Git hooks are executable"
 else
   echo -e "  ${RED}✗${NC} Git hooks need to be made executable"

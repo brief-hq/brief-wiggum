@@ -6,7 +6,7 @@ description: Run task in iterative Ralph Wiggum Loop until verification passes
 
 > "I'm helping!" - Ralph Wiggum
 
-Run a task in an iterative loop until completion criteria are met. Named after the [Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum) pattern.
+Run a task in an iterative loop until completion criteria are met. Named after the [Ralph Wiggum Loop](https://ghuntley.com/ralph/) pattern.
 
 **This is an INTELLIGENT loop** - it leverages the entire Brief infrastructure:
 - **Skills**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
@@ -67,7 +67,7 @@ Run from terminal outside Claude Code:
 
 ## Core Philosophy
 
-From the [Ralph Wiggum methodology](https://awesomeclaude.ai/ralph-wiggum):
+From the [Ralph Wiggum methodology](https://ghuntley.com/ralph/):
 
 1. **Iteration over perfection** - Refinement matters more than first-attempt quality
 2. **Failures as data** - Predictable failures reveal what guardrails to add
@@ -229,6 +229,10 @@ At **iteration 3**, the agent receives explicit instructions to:
 
 ## References
 
-- [Ralph Wiggum Loop origin](https://awesomeclaude.ai/ralph-wiggum)
-- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent)
-- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop)
+- [Original Ralph Wiggum](https://ghuntley.com/ralph/) - Greg Huntley's foundational work
+- [Boris Cherney's thread](https://x.com/bcherny/status/2007179858435281082) - Early exploration of the pattern
+- [Claude Code Ralph Plugin](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) - Anthropic's official plugin
+- [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) - Anthropic engineering blog
+- [Ralph Wiggum Best Practices](https://www.youtube.com/watch?v=eAtvoGlpeRU) - Bash loop vs plugin comparison
+- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent) - Production implementation
+- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop) - Origins and methodology

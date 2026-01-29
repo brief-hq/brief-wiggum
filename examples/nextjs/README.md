@@ -15,7 +15,7 @@ This example shows how to configure Brief Wiggum for a typical Next.js project.
 
 1. Copy the CLAUDE.md from this directory to your project root
 2. Copy the .claude/ directory from the parent brief-wiggum repo
-3. Connect Brief MCP (see docs/brief-mcp-setup.md)
+3. Connect Brief MCP (see https://briefhq.ai/docs/mcp-setup/)
 4. Run `/onboard`
 
 ## Key Files

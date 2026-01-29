@@ -12,7 +12,7 @@ Brief Wiggum provides an AI agent configuration for Claude Code and Cursor that 
 
 ## Quick Start
 
-> **Prerequisite**: You need Brief MCP connected to your AI editor. See [docs/brief-mcp-setup.md](docs/brief-mcp-setup.md) for setup.
+> **Prerequisite**: You need Brief MCP connected to your AI editor. See [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) for setup.
 
 1. Fork this repository
 2. Connect Brief MCP in your Claude Code or Cursor settings
@@ -83,7 +83,7 @@ Specialized agents for complex tasks:
 
 Brief Wiggum follows these principles:
 
-1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files, not session history. This keeps the AI in its "smart zone" ([why this matters](https://www.aihero.dev/blog/posts/why-the-anthropic-ralph-plugin-sucks)).
+1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files and Brief MCP (product context, decisions), not session history. This keeps the AI in its "smart zone" where it performs best.
 
 2. **Simplicity over configuration** - Four principles in CLAUDE.md, not 200 lines of rules.
 
@@ -93,7 +93,7 @@ Brief Wiggum follows these principles:
 
 ## Requirements
 
-- **Brief MCP**: Connect to your Brief workspace ([setup guide](docs/brief-mcp-setup.md))
+- **Brief MCP**: Connect to your Brief workspace ([setup guide](https://briefhq.ai/docs/mcp-setup/))
 - **Claude Code** or **Cursor**: AI-assisted development environment
 - **pnpm/npm/yarn**: For running build commands
 - **Optional**: `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for `/peer-review`
@@ -103,7 +103,7 @@ Brief Wiggum follows these principles:
 | Doc | Description |
 |-----|-------------|
 | [Quick Start](docs/quick-start.md) | 5-minute setup guide |
-| [Brief MCP Setup](docs/brief-mcp-setup.md) | Connect Brief to your editor |
+| [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) | Connect Brief to your editor |
 | [Philosophy](docs/philosophy.md) | Ralph Wiggum methodology |
 | [Platform Support](docs/platform-support.md) | Claude Code vs Cursor |
 | [Customization](docs/customization.md) | Adapt for your stack |
@@ -137,4 +137,14 @@ MIT License - see [LICENSE](LICENSE)
 
 ---
 
-Named after the [Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum) pattern for iterative AI agent execution.
+## Prior Art
+
+Named after the Ralph Wiggum Loop pattern for iterative AI agent execution.
+
+- [Original Ralph Wiggum](https://ghuntley.com/ralph/) - Greg Huntley's foundational work
+- [Boris Cherney's thread](https://x.com/bcherny/status/2007179858435281082) - Early exploration of the pattern
+- [Claude Code Ralph Plugin](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) - Anthropic's official plugin
+- [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) - Anthropic engineering blog
+- [Ralph Wiggum Best Practices](https://www.youtube.com/watch?v=eAtvoGlpeRU) - Bash loop vs plugin comparison
+- [Vercel Ralph Loop Agent](https://github.com/vercel-labs/ralph-loop-agent) - Production implementation
+- [Dev Interrupted Podcast](https://linearb.io/dev-interrupted/podcast/inventing-the-ralph-wiggum-loop) - Origins and methodology

@@ -9,7 +9,7 @@ description: Run task in iterative Ralph Wiggum Loop until verification passes
 Run a task in an iterative loop until completion criteria are met. Named after the [Ralph Wiggum Loop](https://awesomeclaude.ai/ralph-wiggum) pattern.
 
 **This is an INTELLIGENT loop** - it leverages the entire Brief infrastructure:
-- **Skills**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
+- **Skills**: development (TDD + debugging), patterns (API + security), brief-design, extensions
 - **Commands**: TodoWrite, guard_approach, Brief MCP
 - **Methodology**: TDD (RED-GREEN-REFACTOR), systematic debugging
 - **Guards**: Escalation at iteration 3, decision validation
@@ -29,15 +29,13 @@ The loop analyzes your task and loads relevant skills:
 
 | Task Contains | Skills Loaded |
 |---------------|---------------|
-| api, route, endpoint, database | brief-patterns, security-patterns |
-| component, ui, page, button, form | brief-design, brief-patterns |
-| bug, fix, error, broken | debugging |
-| add, implement, create, new | tdd |
-| test, coverage, spec | testing-strategy |
-| extension, chrome | chrome-extension |
-| mcp, tool | mcp-development |
+| api, route, endpoint, database | patterns |
+| component, ui, page, button, form | brief-design, patterns |
+| bug, fix, error, broken, test, coverage | development |
+| add, implement, create, new, feature | development |
+| extension, chrome, mcp, tool | extensions |
 
-**Always loaded**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
+**Always loaded**: development, patterns
 
 ## Usage
 
@@ -133,11 +131,10 @@ The intelligent Ralph Loop uses the FULL Brief harness:
 
 | Skill | First Iteration | Retry Iterations |
 |-------|-----------------|------------------|
-| `tdd` | RED-GREEN-REFACTOR instructions | Continue TDD cycle |
-| `debugging` | Investigation methodology | 4-phase debugging process |
-| `brief-patterns` | API/DB/Component patterns | Pattern compliance check |
-| `security-patterns` | HIPAA/SOC-2 requirements | Security validation |
-| `testing-strategy` | 80% coverage mandate | Coverage enforcement |
+| `development` | TDD + debugging methodology | Continue cycle, escalate at iteration 3 |
+| `patterns` | API/DB/security patterns | Pattern + security compliance check |
+| `brief-design` | Design system tokens | Design system validation |
+| `extensions` | Chrome/MCP patterns | Extension-specific fixes |
 
 ### Commands Used
 
@@ -181,11 +178,10 @@ At **iteration 3**, the agent receives explicit instructions to:
 
 # The agent will:
 # 1. Create TodoWrite plan
-# 2. Apply TDD (RED-GREEN-REFACTOR)
-# 3. Apply brief-patterns (Zod, withV1Auth)
-# 4. Apply security-patterns (input validation)
-# 5. Run tests/lint/typecheck until pass
-# 6. Run full /prep checklist before done
+# 2. Apply development skill (TDD RED-GREEN-REFACTOR)
+# 3. Apply patterns skill (Zod, withV1Auth, security)
+# 4. Run tests/lint/typecheck until pass
+# 5. Run full /prep checklist before done
 ```
 
 ### Quick Iteration for Refactoring

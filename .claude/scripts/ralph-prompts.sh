@@ -450,7 +450,8 @@ check_plan_complete() {
 }
 
 # Enhanced skill detection (kept for logging purposes)
-# Skills consolidated: development (tdd+debugging+testing), patterns (api+security), brief-design, extensions, visual-testing
+# Consolidated skills: development (tdd+debugging+testing), patterns (api+security), extensions (chrome+mcp)
+# Separate skills: brief-design, visual-testing
 detect_task_skills() {
   local task="$1"
   local skills=""

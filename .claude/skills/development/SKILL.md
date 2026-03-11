@@ -156,7 +156,7 @@ Design and run a minimal test to validate or invalidate.
 
 **Only now do you write the fix.**
 
-1. Check for conflicts with existing decisions via `guard_approach`
+1. Check for conflicts with existing decisions via `brief ask --mode check`
 2. Write the minimal fix
 3. Write regression test first (TDD)
 4. Verify the fix

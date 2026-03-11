@@ -4,13 +4,13 @@
 
 - Run `/onboard` to load Brief context and report readiness
 - Run `/onboard BRI-XXX` for specific Linear task with auto-generated todos
-- All agents have access to Brief MCP for business context
+- All agents have access to Brief CLI for business context
 
 ## Context Loading Order
 
 When `/onboard [BRI-XXX]` runs, context is loaded in this order:
 
-### 1. Brief MCP (mcp__brief__brief_get_onboarding_context)
+### 1. Brief CLI (brief context --json)
 - **Product**: customers, service definition, competitive advantages
 - **Personas**: top user types with needs and pain points
 - **Strategic context**: 6-month goal, top metrics
@@ -66,8 +66,8 @@ When `/onboard [BRI-XXX]` runs, context is loaded in this order:
 
 **Required Behaviors**
 - ✅ **ALWAYS**: Run lint, test, typecheck, build before commit/push
-- ✅ **ALWAYS**: Use Brief MCP for context before architectural decisions
-- ✅ **ALWAYS**: Check Brief decisions with guard_approach before changes
+- ✅ **ALWAYS**: Use Brief CLI for context before architectural decisions
+- ✅ **ALWAYS**: Check Brief decisions with brief ask --mode check before changes
 - ❌ **NEVER**: commit/push without explicit approval (EXCEPTION: /prep)
 
 ## Architecture Overview
@@ -173,7 +173,7 @@ types/
 Brief + Linear + codebase discovery. Loads all context layers.
 
 ### task-planner
-Implementation planning with Brief context. Uses guard_approach.
+Implementation planning with Brief context. Uses brief ask --mode check.
 
 ### implementation
 Autonomous coding with permission gates. Follows patterns, writes tests.
@@ -184,10 +184,10 @@ Pre-commit validation. Full checklist.
 ### code-explorer
 Codebase navigation. Answers "where is X?" efficiently.
 
-## Brief MCP Integration
+## Brief CLI Integration
 
 - **Product context**: Auto-loaded on /onboard
-- **Recent decisions**: Checked via guard_approach
+- **Recent decisions**: Checked via brief ask --mode check
 - **Active work**: Synced from Linear
 - **Decision conflicts**: Validated before architectural changes
 

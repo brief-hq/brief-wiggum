@@ -30,27 +30,17 @@ This verifies:
 - Scripts are executable
 - Required tools are installed
 
-## Step 3: Connect Brief MCP
+## Step 3: Install Brief CLI
 
-See [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) for detailed instructions.
+See [Brief CLI Setup](https://briefhq.ai/docs/cli-setup/) for detailed instructions.
 
-**Quick version for Claude Code:**
+**Quick version:**
 
-1. Get your Brief API key from the Brief dashboard
-2. Add to your Claude Code MCP settings:
+1. Install the Brief CLI
+2. Authenticate with your Brief account:
 
-```json
-{
-  "mcpServers": {
-    "brief": {
-      "url": "https://app.briefhq.ai/api/mcp/sse",
-      "transport": "sse",
-      "headers": {
-        "Authorization": "Bearer YOUR_BRIEF_API_KEY"
-      }
-    }
-  }
-}
+```bash
+brief login
 ```
 
 ## Step 4: Customize CLAUDE.md
@@ -87,14 +77,14 @@ The agent will:
 
 ## Verify It's Working
 
-### Brief MCP
+### Brief CLI
 ```
 /health
 ```
 
 Should show:
 ```
-✅ Brief MCP: Connected
+✅ Brief CLI: Connected
 ```
 
 ### Git Guards
@@ -121,10 +111,10 @@ Should show the prompt that would be sent.
 
 ## Common Issues
 
-### "Brief MCP not connected"
+### "Brief CLI not installed"
 
 - Check your API key is valid
-- Verify the MCP server URL
+- Verify Brief CLI is installed and authenticated
 - Restart Claude Code/Cursor
 
 ### "Permission denied" on scripts

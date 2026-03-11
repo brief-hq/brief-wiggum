@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release
 - Core infrastructure (hooks, scripts, skills, commands, agents)
-- Brief MCP integration
+- Brief CLI integration
 - Linear integration support
 - Documentation and examples
 

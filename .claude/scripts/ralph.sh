@@ -7,7 +7,7 @@
 # - Skills: tdd, debugging, brief-patterns, security-patterns, testing-strategy
 # - Commands: /onboard, /prep, /todo-all
 # - Agents: context-loader, task-planner, implementation
-# - Guards: decision-guard (guard_approach), git-guard
+# - Guards: decision-guard (brief ask --mode check), git-guard
 #
 # USAGE:
 #   ./ralph.sh "Implement feature X with tests"
@@ -457,7 +457,7 @@ main() {
     # This is intentional - context is carried via .ralph/plan.md and .ralph/activity.md
     # --permission-mode acceptEdits allows file edits without prompting
     # --allowedTools: MUST use explicit tool names, NOT wildcards (wildcards cause silent failures)
-    local allowed_tools="mcp__brief__brief_get_onboarding_context,mcp__brief__brief_prepare_context,mcp__brief__brief_execute_operation,mcp__linear-server__get_issue,mcp__linear-server__list_issues,mcp__linear-server__get_project,mcp__linear-server__update_issue,Read,Edit,Write,Glob,Grep,TodoWrite,Bash"
+    local allowed_tools="Bash(brief context:*),Bash(brief ask:*),Bash(brief search:*),mcp__linear-server__get_issue,mcp__linear-server__list_issues,mcp__linear-server__get_project,mcp__linear-server__update_issue,Read,Edit,Write,Glob,Grep,TodoWrite,Bash"
 
     # Add Playwright tools if visual check is enabled
     if [[ "$VISUAL_CHECK" == "true" ]]; then

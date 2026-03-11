@@ -20,14 +20,27 @@ Run full pre-commit validation checklist.
 - Run test suite: `pnpm test` (from monorepo root - runs via Turborepo)
 - Minimum 80% coverage for new code
 
-### 3. File Size Check
-- Check if any changed files exceed 1000 LOC
-- Suggest code extraction if needed
+### 3. File Size Check (BLOCKING)
+
+**BLOCKING -- fail if any changed file exceeds 500 LOC. No exceptions.**
+
+```bash
+git diff --cached --name-only -z | while IFS= read -r -d '' f; do
+  [ -f "$f" ] && echo "$f" | grep -qE '\.(ts|tsx)$' && \
+  lines=$(wc -l < "$f") && [ "$lines" -gt 500 ] && echo "FAIL: $f ($lines lines)"
+done
+```
+
+- **FAIL the entire /prep** if ANY staged `.ts`/`.tsx` file exceeds 500 lines
+- Do NOT rationalize ("it was already large", "just 50 lines over", "mostly types")
+- Do NOT proceed to commit -- fix first by extracting code
+- The only valid response is to split the file before re-running /prep
+- Check ALL staged files, not just modified ones -- catches files that grew during the session
 
 ### 4. Documentation Check
 - Identify if changes warrant /docs updates
-- API changes → update API docs
-- Architecture changes → update architecture docs
+- API changes -> update API docs
+- Architecture changes -> update architecture docs
 
 ### 5. Code Quality (from monorepo root)
 - Run lint: `pnpm lint`
@@ -118,8 +131,7 @@ If staged files include `components/` or `*.tsx`:
 ## Branch Creation
 
 If not already on feature branch:
-- Get branch name from Linear issue using `mcp__linear-server__get_issue`
-- Use the `branchName` field from the issue (Linear generates this automatically)
+- Get branch name from Linear issue: `linearis issues read BRI-XXX` returns `branchName`
 - Example: `git checkout -b {username}/bri-{issue_id}-{description}`
 - If no Linear issue, fall back to manual branch naming: `{username}/bri-{issue_id}-{description}`
 
@@ -128,7 +140,7 @@ If not already on feature branch:
 Report card:
 - ✅/❌ Debug logging removed
 - ✅/❌ Tests added (X% coverage)
-- ✅/❌ File sizes OK
+- ✅/❌ File sizes OK (BLOCKING: >500 LOC = FAIL, no exceptions)
 - ✅/❌ Docs updated (if needed)
 - ✅/❌ Lint passed
 - ✅/❌ Typecheck passed

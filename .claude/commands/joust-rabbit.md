@@ -4,229 +4,145 @@ description: Process PR review comments from CodeRabbit, Cubic, and human review
 
 # Joust the Rabbit (and the Cube)
 
-Poll for and process PR review comments from CodeRabbit, Cubic, and human reviewers. Applies fixes locally but does NOT commit - returns control to user for `/prep`.
+Poll for and process PR review comments from CodeRabbit, Cubic, and human reviewers. Uses `agent-reviews` CLI for all GitHub comment operations. Applies fixes locally, returns control to user for `/prep`.
 
-## Architecture
-
-This is a **skill document** - instructions for an AI agent (Claude), not executable code. The agent follows these instructions during PR review sessions.
-
-This skill runs as a **subagent loop**:
-
-1. **Subagent** polls for comments, applies fixes, and **notes replies to post** (in memory/context)
-2. **Subagent emits** code changes back to main agent
-3. **Main agent** validates the work and prompts user to `/prep`
-4. **After `/prep` pushes**, agent posts the noted replies via `gh api`
-5. **Loop continues** if CodeRabbit/Cubic counter-replies need action
-
-**Why reply after push?** CodeRabbit re-checks the code when you reply. If your fix isn't pushed yet, CodeRabbit counter-replies disputing it. Always push first, then reply.
+**Why reply after push?** CodeRabbit re-checks when you reply. If the fix isn't pushed yet, it counter-replies disputing it. Always push first, then reply.
 
 ## Workflow
 
-### 1. Get PR Context
-```bash
-gh pr view --json number,headRefName,url
-```
-
-### 2. Wait for Bot Analysis
-
-Both CodeRabbit and Cubic take 1-3 minutes to analyze new commits. **You MUST wait for analysis to complete before processing comments.**
-
-#### 2a. Check Processing Status
-
-Check if bots are still analyzing:
+### 1. Fetch Unanswered Bot Comments
 
 ```bash
-# Get the latest CodeRabbit and Cubic issue comments
-gh api /repos/brief-hq/brief/issues/{number}/comments | \
-  jq '[.[] | select(.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]")] | last | .body' | head -5
+npx agent-reviews --bots-only --unanswered --json
 ```
 
-If you see "Currently processing new changes in this PR" - **WAIT**. Poll every 30 seconds until this clears.
-
-#### 2b. Compare Against Latest Commit
-
-Get the latest commit SHA and timestamp:
-```bash
-gh pr view {number} --json commits --jq '.commits[-1] | "\(.oid) \(.committedDate)"'
-```
-
-Then check if the bots' latest reviews are AFTER this commit:
-```bash
-# Get CodeRabbit's walkthrough comment timestamp
-gh api /repos/brief-hq/brief/issues/{number}/comments | \
-  jq '[.[] | select(.user.login == "coderabbitai[bot]" and (.body | contains("Walkthrough")))] | last | .updated_at'
-
-# Get Cubic's latest review comment timestamp
-gh api /repos/brief-hq/brief/issues/{number}/comments | \
-  jq '[.[] | select(.user.login == "cubic-dev-ai[bot]")] | last | .updated_at'
-```
-
-**Only proceed when BOTH bot review timestamps are AFTER the latest commit timestamp.**
-
-#### 2c. Poll Until Ready
+If no comments found, check if bots are still analyzing:
 
 ```bash
-# Poll every 30 seconds, timeout after 5 minutes
-gh api /repos/brief-hq/brief/pulls/{number}/comments | \
-  jq '[.[] | select(.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]")]'
+npx agent-reviews --bots-only --json
 ```
 
-**CodeRabbit Rate Limit Handling**: If CodeRabbit posts "Rate limit exceeded":
-1. Parse wait time from message (e.g., "wait 16 minutes and 56 seconds")
-2. Report: "CodeRabbit rate limited. Waiting ~17 minutes..."
-3. Sleep for wait time + 1-minute buffer
-4. Trigger re-review: `gh api /repos/brief-hq/brief/issues/{number}/comments -f body="@coderabbitai review"`
-5. Resume polling
+If you see "Currently processing new changes" in any bot comment body, wait and poll:
 
-**Cubic Rate Limit Handling**: Cubic has different limits:
-- **Free plan**: 20 PR reviews/month quota
-- **Paid plans**: Unlimited reviews (but GitHub API limits still apply)
-- **Per-PR limit**: 150 eligible files processed per review
-
-If Cubic posts "quota exceeded" or similar:
-1. Check current plan status in Cubic's PR summary comment
-2. Report: "Cubic quota exhausted for this billing period."
-3. For free plans: Alert user to consider upgrading or wait for quota reset
-4. For file limits: Cubic may skip some files - check its summary for "X of Y files reviewed"
-5. **Note**: Cubic quota status visible in PR comments under "cubic analysis" header
-
-### 3. Fetch All Review Comments
 ```bash
-# Code-level review comments (both bots + humans)
-gh api /repos/brief-hq/brief/pulls/{number}/comments
-
-# PR-level issue comments
-gh api /repos/brief-hq/brief/issues/{number}/comments
+# Poll every 30s until new comments appear
+npx agent-reviews --watch --bots-only --interval 30 --timeout 300
 ```
 
-### 4. Categorize by Source
+### 2. Fetch Human Comments (if any)
 
-**CodeRabbit** (`user.login == "coderabbitai[bot]"`):
+```bash
+npx agent-reviews --humans-only --unanswered --json
+```
+
+### 3. Categorize by Source
+
+From the JSON output, categorize each comment:
+
+**CodeRabbit** (`author` contains "coderabbitai"):
 - Parse severity: `_🔴 Critical_`, `_⚠️ Potential issue_`, `_🟡 Minor_`, `_💡 Suggestion_`
 - Extract committable suggestion from `📝 Committable suggestion` block
 - Extract AI instructions from `🤖 Prompt for AI Agents` block
 
-**Cubic** (`user.login == "cubic-dev-ai[bot]"`):
+**Cubic** (`author` contains "cubic-dev-ai"):
 - Parse priority: `P1:` (rule violation, must fix), `P2:` (suggestion, should fix)
-- Parse metadata from HTML comment: `<!-- metadata:{"confidence":N,"steps":[...]} -->`
 - Higher confidence (9+) = more certain, prioritize these
-- Extract rule name from `Rule violated: **Rule Name**` pattern
 - Look for `Prompt for AI agents` in `<details>` block for fix instructions
-- Cubic references team learnings/feedback - these inform context but don't always require changes
 
-**Human reviewers** (`user.type == "User"`):
+**Human reviewers**:
 - Classify intent: question, approval, change request, architectural feedback
-- No structured format - interpret natural language
 
-### 5. Triage Each Comment
+### 4. Triage Each Comment
 
-**Default: Fix almost everything.** There's basically zero cost to addressing even minor feedback. Be aggressive about applying fixes rather than pushing back.
+**Default: Fix almost everything.** There's basically zero cost to addressing even minor feedback.
 
 **Auto-fix** (apply without asking):
 - ANY severity/priority level with a clear fix
 - Has a committable suggestion (CodeRabbit) or code suggestion (Cubic)
 - Localized changes (single file, few lines)
-- Even "suggestions" - just do them
 
 **Verify first** (check against codebase):
-- Suggestion changes core behavior
-- Affects multiple files significantly
-- Run `guard_approach` if architectural
+- Suggestion changes core behavior or affects multiple files
+- Run `brief ask --mode check` if architectural
+
+**Defer (needs approval)** — don't silently defer, ask user:
+- Too large or cross-cutting to fix inline
+- Out of scope for this PR
+- Requires architectural discussion or broader refactor
 
 **Reject** (rare - explain why):
 - Directly conflicts with Brief decisions
-- Would break existing functionality
 - Based on factually incorrect assumptions
 - Requires admin client intentionally (e.g., RPC calls)
-- **Cubic rule violations that don't apply**: e.g., "hand-written SQL" when it was actually drizzle-kit generated
+- **Cubic false positives**: e.g., "hand-written SQL" when it was drizzle-kit generated
 
-> **Note:** `guard_approach` is a Brief MCP operation that validates approaches against recorded architectural decisions:
+> Use `brief ask --mode check` to validate approaches against recorded architectural decisions:
+> ```bash
+> brief ask --mode check "We plan to [description]"
 > ```
-> mcp__brief__brief_execute_operation(operation: "guard_approach", parameters: { approach: "description" })
-> ```
 
-#### Cubic-Specific Triage
+### 5. Apply Fixes Locally
 
-Cubic focuses on **rule enforcement** based on team learnings. Common patterns:
-
-| Cubic Comment Pattern | Action |
-|-----------------------|--------|
-| `P1: Rule violated: **Database Migration...**` + "hand-written SQL" | **Check if drizzle-kit generated**. If DDL file or `--custom` migration, reply "Drizzle generated" |
-| `P1: Rule violated:` + clear code issue | Fix it |
-| `P2:` + suggestion with code | Fix it |
-| `P2:` + architectural suggestion | Defer with reply if complex |
-| References "team feedback" | Context only, fix if actionable |
-| Low confidence (<7) | Verify before acting |
-
-### 6. Apply Fixes Locally
-
-For auto-fix items:
+For each auto-fix item:
 1. Read the file at the specified path
 2. Find the code matching the `diff_hunk` context
-3. Apply the committable/code suggestion
+3. Apply the fix
 4. Stage the file (`git add {path}`)
 
-**IMPORTANT: Do NOT commit or push.** Leave changes staged for user review.
+**Do NOT commit or push.** Leave changes staged for user review.
 
-### 7. Reply to Comments
+### 5.5. Deferral Approval
 
-**⚠️ CRITICAL: Reply AFTER pushing, not before.**
+If any comments were triaged as **Defer**, present them to the user for approval. Use `AskUserQuestion` to let the user choose per-item:
 
-CodeRabbit re-checks the code when you reply. If changes are only staged (not pushed), CodeRabbit counter-replies disputing your fix because it can't see it yet. This creates unnecessary back-and-forth.
+```text
+⏸️ Deferred Items — Approval Needed ({count}):
 
-**Correct order:**
-1. Apply fixes and stage changes (Section 6)
-2. Return control to user for `/prep` (commits and pushes)
-3. **AFTER push completes**, reply to comments
+1. {file}:{line} - {summary of what's requested}
+   Reason: {why agent wants to defer — too large, cross-cutting, etc.}
+   → [Fix it] [Defer → create ticket] [Ignore]
 
-If running in a loop, note the replies and post them only after `git push` succeeds.
+2. ...
+```
 
-**Error handling:**
-- If `/prep` validation fails: fix issues, re-run `/prep` before posting replies
-- If `git push` fails: resolve conflicts/errors, re-push, then post replies
-- If reply posting fails: retry via `gh api`, or notify user to post manually
+For each item the user chooses:
+- **Fix it** — apply the fix now (move to auto-fix queue, go back to Step 5)
+- **Defer → create ticket** — create a Linear issue and queue reply "Deferred — {issue identifier}"
+- **Ignore** — skip fix, but queue a short terminal reply (e.g., "Ignored - not planned") so it is posted after push and marks the thread as answered
 
-**IMPORTANT: Reply to ALL comments** - even already-fixed ones need confirmation replies.
+**Creating Linear tickets for approved deferrals:**
 
-**Keep replies VERY short** (3-4 words max). Both bots ignore longer messages.
+```bash
+linearis issues create "$(cat <<'LINEARIS_TITLE'
+{summary}
+LINEARIS_TITLE
+)" \
+  --description "$(cat <<'LINEARIS_DESC'
+From PR review comment on {PR}:
 
-Good examples:
+{comment body}
+
+File: {file}:{line}
+LINEARIS_DESC
+)" \
+  --team BRI \
+  --labels "Improvement" \
+  --priority 3
+```
+
+Extract the created issue identifier from the command output to use in the reply.
+
+### 6. Queue Replies (Do Not Post Yet)
+
+Note the reply for each comment. Keep replies **very short** (3-4 words max):
+
 - "Fixed - staged"
 - "Fixed - orgId added"
 - "Intentional - RPC needs admin"
 - "Drizzle generated DDL"
-- "Drizzle --custom generated"
-- "Deferred - separate ticket"
-- "Already escaped"
+- "Deferred — BRI-XXXX" (with actual ticket identifier from Linear)
 
-Bad examples (too long):
-- "I've fixed this issue by adding the orgId parameter to the function"
-- "This was intentionally designed this way because..."
-
-```bash
-# Reply to a review comment
-gh api /repos/brief-hq/brief/pulls/{number}/comments/{comment_id}/replies \
-  -f body="Fixed - staged"
-```
-
-### 7.1 Check for Bot Counter-Replies
-
-After replying, bots may respond with corrections or follow-up questions. Check for these:
-
-```bash
-# Fetch replies to find bot counter-replies
-gh api /repos/brief-hq/brief/pulls/{number}/comments | \
-  jq '[.[] | select(.in_reply_to_id != null and (.user.login == "coderabbitai[bot]" or .user.login == "cubic-dev-ai[bot]"))]'
-```
-
-If a bot disagrees with your reply (e.g., "that's not parameterized" or "this still needs X"):
-1. **Re-read the code** - bots are often right about technical details
-2. **Apply the fix** if the correction is valid
-3. **Reply acknowledging** the fix: "Fixed - encodeURIComponent added"
-
-Bots are usually technically correct. Default to trusting their counter-arguments.
-
-### 8. Report Results
+### 7. Report Results
 
 ```
 🐰🧊 Jousted {n} comments ({coderabbit} CodeRabbit, {cubic} Cubic, {human} human):
@@ -240,50 +156,55 @@ Bots are usually technically correct. Default to trusting their counter-argument
 ⚠️ Needs Review ({count}):
   - {file}:{line} - {reason}
 
+🎫 Deferred ({count}) - tickets created:
+  - {issue identifier}: {title} (from {file}:{line})
+
 ❌ Rejected ({count}):
   - {file}:{line} - {reason}
 
-👍 Acknowledged ({count}):
-  - @{user}: approval noted
-
----
 📋 Next steps:
   1. Review staged changes: `git diff --cached`
   2. Run `/prep` to validate and push
-  3. After push succeeds, replies will be posted automatically
+  3. I'll automatically post queued replies once the push succeeds
 ```
+
+### 8. Post Replies (After Push)
+
+After `/prep` pushes successfully, **immediately continue in this session** and post all queued replies. Do not wait for user input — the push is the trigger:
+
+```bash
+npx agent-reviews --reply {comment_id} "Fixed - staged"
+```
+
+### 9. Check for Counter-Replies (max 3 cycles)
+
+After replying, bots may counter-reply. Check for new unanswered comments:
+
+```bash
+npx agent-reviews --bots-only --unanswered --json
+```
+
+If new comments appear, loop back to Step 3. Track the cycle count:
+
+- **Cycle 1-2**: Fix and reply. Bots are usually technically correct — default to trusting their counter-arguments.
+- **Cycle 3**: Final attempt. If bots still dispute after this fix, stop looping.
+- **After cycle 3**: Escalate to the user. Report which comments remain unresolved and why, so the user can review manually or open a follow-up ticket.
 
 ## Decision Framework
 
-**Bias toward action.** Fix first, verify architecturally if needed (guard_approach is automated, not a question).
+**Bias toward action.** Fix first, verify architecturally if needed.
 
-| Source | Type | Severity/Intent | Action |
-|--------|------|-----------------|--------|
-| CodeRabbit | Code | Any | **Fix it** |
-| CodeRabbit | Refactor | Major | Fix or defer with reply |
-| CodeRabbit | Code | Intentional design | Reply: "Intentional - {reason}" |
-| Cubic | P1 Rule violation | Code issue | **Fix it** |
-| Cubic | P1 Rule violation | False positive (e.g., drizzle-kit) | Reply: "Drizzle generated" |
-| Cubic | P2 Suggestion | Any | Fix or defer with reply |
-| Cubic | Low confidence | Any | Verify first |
-| Human | Question | - | Reply with answer |
-| Human | Approval | - | Acknowledge |
-| Human | Change request | Any | Attempt fix |
-| Human | Architectural | - | Run guard_approach (automated), then fix |
-
-## Severity Mapping
-
-### CodeRabbit Severities
-All severities should be addressed:
-
-- `_🔴 Critical_` → Fix immediately
-- `_⚠️ Potential issue_` → Fix it
-- `_🟡 Minor_` → Fix it
-- `_💡 Suggestion_` → Fix it (low cost, why not?)
-- `_🛠️ Refactor suggestion_` → Fix or defer with short reply
-
-### Cubic Priorities
-- `P1:` → Must address (rule violation or critical issue)
-- `P2:` → Should address (suggestion, improvement)
-- Confidence 9+ → High certainty, prioritize
-- Confidence <7 → Lower certainty, verify before acting
+| Source | Type | Action |
+|--------|------|--------|
+| CodeRabbit | Any severity | **Fix it** |
+| CodeRabbit | Intentional design | Reply: "Intentional - {reason}" |
+| CodeRabbit | Cross-cutting / large | **Defer (ask user)** |
+| Cubic | P1 Rule violation | **Fix it** |
+| Cubic | P1 False positive (drizzle-kit) | Reply: "Drizzle generated" |
+| Cubic | P2 Suggestion | Fix or defer with reply |
+| Cubic | P2 Cross-cutting / large | **Defer (ask user)** |
+| Cubic | Low confidence (<7) | Verify first |
+| Human | Change request | Attempt fix |
+| Human | Change request (large scope) | **Defer (ask user)** |
+| Human | Question | Reply with answer |
+| Human | Architectural | Run `brief ask --mode check`, then fix |

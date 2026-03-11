@@ -10,7 +10,7 @@ Run a task in an iterative loop until completion criteria are met. Named after t
 
 **This is an INTELLIGENT loop** - it leverages the entire Brief infrastructure:
 - **Skills**: tdd, debugging, brief-patterns, security-patterns, testing-strategy
-- **Commands**: TodoWrite, guard_approach, Brief MCP
+- **Commands**: TodoWrite, `brief ask --mode check`, Brief CLI
 - **Methodology**: TDD (RED-GREEN-REFACTOR), systematic debugging
 - **Guards**: Escalation at iteration 3, decision validation
 
@@ -144,8 +144,8 @@ The intelligent Ralph Loop uses the FULL Brief harness:
 | Command/Tool | When Used |
 |--------------|-----------|
 | `TodoWrite` | Break task into trackable steps |
-| `guard_approach` | Before architectural decisions |
-| `Brief MCP` | Product context when needed |
+| `brief ask --mode check` | Before architectural decisions |
+| `Brief CLI` | Product context when needed |
 
 ### Escalation Protocol
 

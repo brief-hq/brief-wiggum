@@ -94,7 +94,7 @@ Step-by-step instructions with code examples.
 
 ## Integration with Brief
 
-How this connects to Brief MCP, decisions, etc.
+How this connects to Brief CLI, decisions, etc.
 
 ## Common Mistakes
 

@@ -12,11 +12,11 @@ Brief Wiggum provides an AI agent configuration for Claude Code and Cursor that 
 
 ## Quick Start
 
-> **Prerequisite**: You need Brief MCP connected to your AI editor. See [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) for setup.
+> **Prerequisite**: You need Brief CLI connected to your AI editor. See [Brief CLI Setup](https://briefhq.ai/docs/cli-setup/) for setup.
 
 1. Fork this repository
-2. Connect Brief MCP in your Claude Code or Cursor settings
-3. Customize `CLAUDE.md.template` → `CLAUDE.md` for your project
+2. Connect Brief CLI in your Claude Code or Cursor settings
+3. Customize `AGENTS.md.template` → `AGENTS.md` for your project
 4. Run `/onboard` to load Brief context and start working
 
 ## Features
@@ -83,17 +83,17 @@ Specialized agents for complex tasks:
 
 Brief Wiggum follows these principles:
 
-1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files and Brief MCP (product context, decisions), not session history. This keeps the AI in its "smart zone" where it performs best.
+1. **Fresh context per iteration** - Each Ralph loop iteration starts with empty context. State carries via files and Brief CLI (product context, decisions), not session history. This keeps the AI in its "smart zone" where it performs best.
 
-2. **Simplicity over configuration** - Four principles in CLAUDE.md, not 200 lines of rules.
+2. **Simplicity over configuration** - Four principles in AGENTS.md, not 200 lines of rules.
 
 3. **Goal-driven execution** - Define success criteria (tests pass, types check), let the agent loop until verified.
 
-4. **Business context injection** - Brief MCP provides product strategy, decisions, and customer insights so AI doesn't just write code—it writes the right code.
+4. **Business context injection** - Brief CLI provides product strategy, decisions, and customer insights so AI doesn't just write code--it writes the right code.
 
 ## Requirements
 
-- **Brief MCP**: Connect to your Brief workspace ([setup guide](https://briefhq.ai/docs/mcp-setup/))
+- **Brief CLI**: Connect to your Brief workspace ([setup guide](https://briefhq.ai/docs/cli-setup/))
 - **Claude Code** or **Cursor**: AI-assisted development environment
 - **pnpm/npm/yarn**: For running build commands
 - **Optional**: `OPENAI_API_KEY` and/or `GEMINI_API_KEY` for `/peer-review`
@@ -103,7 +103,7 @@ Brief Wiggum follows these principles:
 | Doc | Description |
 |-----|-------------|
 | [Quick Start](docs/quick-start.md) | 5-minute setup guide |
-| [Brief MCP Setup](https://briefhq.ai/docs/mcp-setup/) | Connect Brief to your editor |
+| [Brief CLI Setup](https://briefhq.ai/docs/cli-setup/) | Connect Brief to your editor |
 | [Philosophy](docs/philosophy.md) | Ralph Wiggum methodology |
 | [Platform Support](docs/platform-support.md) | Claude Code vs Cursor |
 | [Customization](docs/customization.md) | Adapt for your stack |

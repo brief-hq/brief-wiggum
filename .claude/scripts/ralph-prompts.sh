@@ -10,7 +10,7 @@
 #   - activity.md: Log of what happened each iteration
 #
 # CONTEXT LOADING:
-#   - Brief MCP: Product context, decisions (first iteration only)
+#   - Brief CLI: Product context, decisions (first iteration only)
 #   - Linear: Issue details, acceptance criteria (first iteration only)
 #
 # Skills are invoked by reference, not embedded in prompt.
@@ -114,8 +114,8 @@ $task
 
 This is a **multi-issue project**. Load all context:
 
-1. **Load Brief product context** using mcp__brief__brief_get_onboarding_context
-2. **Load the PRD** "${brief_doc}" from Brief using mcp__brief__brief_prepare_context with preparation_type="search"
+1. **Load Brief product context** using brief context --json
+2. **Load the PRD** "${brief_doc}" from Brief using brief ask
 3. **Load all project issues** using mcp__linear-server__list_issues with project="$linear_project"
    - This will return all issues in dependency order
    - Note each issue's ID, title, description, and priority
@@ -192,7 +192,7 @@ build_first_iteration_prompt() {
 
   if [[ -n "$brief_doc" ]]; then
     context_steps="$context_steps
-2. Search Brief for document \"$brief_doc\" using mcp__brief__brief_prepare_context"
+2. Search Brief for document \"$brief_doc\" using brief ask"
   fi
 
   # Build verification criteria
@@ -215,7 +215,7 @@ $task
 ## Step 1: Load Context
 $context_steps
 
-Also load Brief product context using mcp__brief__brief_get_onboarding_context to understand the product.
+Also load Brief product context using brief context --json to understand the product.
 
 ## Step 2: Create Plan
 
@@ -414,7 +414,7 @@ cat <<ESCALATION
 You've had $((iteration - 1)) failed attempts. Consider:
 - Is the approach fundamentally wrong?
 - Is the task too big? Break it down further.
-- Is there a conflicting Brief decision? Check with guard_approach.
+- Is there a conflicting Brief decision? Check with brief ask --mode check.
 ESCALATION
 fi)
 $(get_visual_check_instructions)

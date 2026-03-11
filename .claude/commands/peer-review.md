@@ -71,7 +71,7 @@ For EACH finding from the external review:
 
 - External models have **no context** about your project's patterns - expect false positives
 - Trust your established patterns over external suggestions
-- Check `guard_approach` if finding suggests architectural changes
+- Run `brief ask --mode check` if finding suggests architectural changes
 - If genuinely unsure about a finding, mark as "Needs Investigation"
 
 ## Requirements

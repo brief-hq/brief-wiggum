@@ -8,17 +8,17 @@ Validate the agent setup and environment.
 
 ## Checks
 
-### 1. Brief MCP Connection
-- Try: mcp__brief__brief_get_onboarding_context
+### 1. Brief CLI Connection
+- Try: `brief status --json`
 - ✅ Connected / ❌ Not available
 
 ### 2. Linear Integration
-- Try: mcp__linear-server__list_teams
+- Try: `linearis teams list`
 - ✅ Connected / ❌ Not available
 
 ### 3. Guardrails
-- Check: .claude/settings.json or .cursor/settings.json exists
-- Verify: deny and require_approval rules present
+- Check: AGENTS.md exists (source of truth); CLAUDE.md and .cursorrules are stubs pointing to it
+- Verify: .claude/settings.local.json exists with permission rules
 - ✅ Configured / ❌ Missing
 
 ### 4. Codebase Access
@@ -42,7 +42,7 @@ Health report:
 ```
 Environment Health Check:
 Platform: Claude Code
-✅ Brief MCP: Connected (user context)
+✅ Brief CLI: Connected (org_xxx)
 ✅ Linear: Connected (brief-hq workspace)
 ✅ Guardrails: Configured (10 deny rules, 5 approval rules)
 ✅ Codebase: Accessible
@@ -55,8 +55,8 @@ If any failures, suggest fixes:
 ```
 Environment Health Check:
 Platform: Cursor
-❌ Brief MCP: Not connected
-   Fix: Run /brief to set up MCP server
+❌ Brief CLI: Not authenticated
+   Fix: Run `brief login` to authenticate
 ✅ Linear: Connected
 ✅ Composer mode: Available
 ...

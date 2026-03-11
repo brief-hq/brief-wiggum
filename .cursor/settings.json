@@ -1,19 +1,8 @@
 {
   "_note": "Cursor settings - mirrors .claude/settings.json for compatibility",
-  "mcp": {
-    "servers": {
-      "brief": {
-        "url": "https://app.briefhq.ai/api/mcp/sse",
-        "transport": "sse",
-        "headers": {
-          "Authorization": "Bearer YOUR_BRIEF_API_KEY"
-        }
-      }
-    }
-  },
   "permissions": {
     "allow": [
-      "Brief MCP tools",
+      "Brief CLI tools (brief context, brief ask, brief search)",
       "Linear MCP tools",
       "Playwright MCP tools",
       "Safe git commands (status, log, diff, branch)",

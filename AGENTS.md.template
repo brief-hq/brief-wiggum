@@ -1,0 +1,102 @@
+# [PROJECT_NAME] AI Agent Setup
+
+<!-- Generated from Brief Wiggum. See https://github.com/brief-hq/brief-wiggum -->
+
+## Principles
+
+1. **Think Before Coding** - Surface confusion, don't assume. If uncertain, ask.
+2. **Simplicity First** - Minimum code that solves the problem. No speculation.
+3. **Surgical Changes** - Touch only what you must. Don't "improve" adjacent code.
+4. **Goal-Driven Execution** - Define success criteria, loop until verified.
+
+## Quick Start
+
+- Run `/onboard` to load Brief context
+- Run `/onboard BRI-XXX` for specific Linear task
+- Use `brief ask --mode check` before architectural decisions
+
+## Hard Rules
+
+### Blocked Operations
+
+- `git commit --amend`, `push --force`, `rebase`, `reset` (history modification)
+- `git checkout .`, `restore`, `clean -f` (work destruction)
+- `git push` to main/master/production directly (use PRs)
+- `git branch -D` (force delete - use `-d` instead)
+
+### Required Behaviors
+
+- Run tests, lint, typecheck before commits
+- Use `brief ask --mode check` before architectural decisions
+- Never commit without explicit approval (exception: `/prep` IS the approval)
+
+### Session Efficiency
+
+Long sessions are the #1 driver of token waste. Prompt cache grows linearly with conversation length -- a 900-turn session costs 10x more per turn than a 50-turn session.
+
+- **One session per task**: Start a new session for each Linear ticket or distinct unit of work. Never chain unrelated tasks in one session.
+- **Watch session length**: After ~50 tool calls, actively evaluate whether to continue or start fresh. Use `/transfer-context` to hand off state cleanly.
+- **Never re-read unchanged files**: If you read a file earlier in this session and have not edited it since, work from what you already know. Only re-read after your own edits or if the user indicates external changes.
+- **Use targeted reads**: For files >200 lines, use offset/limit to read only the section you need. Don't read entire large files when you need one function.
+- **Prefer sub-agents for isolated subtasks**: Sub-agents run in their own context window. Route self-contained work (search, exploration, single-file changes) to sub-agents to prevent context accumulation in the parent.
+- **Use `fast` model for simple sub-agents**: Sub-agents doing grep, file reads, or tightly-scoped edits should use `model: "fast"`. Reserve the default model for multi-step reasoning.
+
+## Brief CLI Integration
+
+Load context with `/onboard`. The primary tool is `brief ask` -- a PM teammate with full access to your org's knowledge, decisions, and connected tools. Run `brief ask --mode check` before architectural changes. For deterministic operations, use specific CLI subcommands (`brief decisions`, `brief docs`, `brief features`).
+
+## Commands
+
+| Command                | Purpose                                             |
+| ---------------------- | --------------------------------------------------- |
+| `/onboard [BRI-XXX]`  | Load Brief + Linear context                         |
+| `/prep`               | Pre-commit validation, then commit                  |
+| `/tdd`                | Test-driven development (RED-GREEN-REFACTOR)        |
+| `/design [mode]`      | Design system tools (audit/polish/simplify/animate) |
+| `/debug`              | Systematic root cause analysis                      |
+| `/joust-rabbit`       | Process PR review comments                          |
+| `/ralph`              | Iterative loop until verification                   |
+| `/refactor`           | Guided code refactoring                             |
+| `/review`             | Code review current changes                         |
+| `/brief`              | Query Brief for product context                     |
+| `/linear`             | Interact with Linear issues                         |
+| `/update-docs`        | Update project documentation                        |
+| `/session-check`      | Evaluate session health and token usage             |
+| `/transfer-context`   | Hand off session state to a new session             |
+| `/peer-review`        | Multi-model code review (OpenAI, Gemini)            |
+| `/health`             | Check environment and tool connectivity             |
+| `/todo-all`           | Execute all pending todos                           |
+
+## Project Configuration
+
+<!-- Customize below for your stack -->
+
+**Stack**: [YOUR_STACK]
+
+```bash
+# Commands
+pnpm dev        # Start dev server
+pnpm build      # Build project
+pnpm test       # Run tests
+pnpm lint       # Lint code
+pnpm typecheck  # Type check
+```
+
+### File Organization
+
+- API routes: `[YOUR_API_PATH]`
+- Components: `[YOUR_COMPONENT_PATH]`
+- Utilities: `[YOUR_UTILS_PATH]`
+- Types: `[YOUR_TYPES_PATH]`
+
+### Branch Naming
+
+Get branch name from Linear issue (`branchName` field) or create manually:
+`{username}/bri-{issue_id}-{description}`
+
+## Platform Support
+
+- **Claude Code**: CLAUDE.md (stub pointing here), PreToolUse hooks, native TodoWrite
+- **Cursor**: .cursorrules (stub pointing here), permissions.deny
+- **Codex**: AGENTS.md (native rules), `.codex/commands` (slash commands), `.codex/skills` (shared skills)
+- AGENTS.md is the single source of truth; CLAUDE.md and .cursorrules are stubs for tool compatibility

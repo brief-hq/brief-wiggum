@@ -37,7 +37,7 @@ This security policy covers:
 ## Out of Scope
 
 - Vulnerabilities in Claude Code or Cursor themselves
-- Vulnerabilities in Brief MCP (report to Brief directly)
+- Vulnerabilities in Brief CLI (report to Brief directly)
 - Issues that require physical access to a machine
 
 ## Recognition

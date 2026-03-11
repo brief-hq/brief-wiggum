@@ -17,7 +17,7 @@ Execute all tasks in the TodoWrite list autonomously with permission gates.
    - **Pause at permission gates**:
      - git commit
      - git push
-     - mcp__brief delete operations
+     - Brief CLI write/delete operations
      - Destructive bash operations
    - **For complex tasks (>50 LOC changed)**: Run two-stage review before marking complete
    - Mark as completed when done
@@ -54,9 +54,8 @@ If Stage 1 fails:
 
 Verify the implementation follows Brief standards:
 
-- **brief-patterns compliance?** API routes, database access, component architecture
-- **security-patterns checks?** Input validation, auth, RLS, no secrets exposed
-- **testing-strategy coverage?** Tests written per requirements (80% minimum)
+- **patterns compliance?** API routes, database access, security (auth, RLS, validation)
+- **development compliance?** Tests written per requirements (80% minimum)
 - **No excessive logging?** Debug statements removed
 - **File size check?** No file exceeds 1000 LOC
 
@@ -201,7 +200,7 @@ Waiting for approval to continue...
 - TodoWrite (read status, update status)
 - All implementation tools (Read, Edit, Write, etc.)
 - Bash (with permission gate for commits)
-- mcp__brief (read-only, write requires approval)
+- Brief CLI (read commands, write commands require user approval)
 
 **For Cursor users**:
 - Use composer mode for multi-file tasks

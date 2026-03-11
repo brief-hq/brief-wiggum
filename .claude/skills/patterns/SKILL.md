@@ -1,5 +1,5 @@
 ---
-description: Brief-specific code patterns, security requirements, and decision validation. Covers API routes, database, components, auth, RLS, and guard_approach.
+description: Brief-specific code patterns, security requirements, and decision validation. Covers API routes, database, components, auth, RLS, and brief ask --mode check.
 ---
 
 # Brief Patterns & Security
@@ -59,7 +59,7 @@ export const POST = withV1Auth(async (req, context) => {
 
 ---
 
-## Brief MCP Integration
+## Brief CLI Integration
 
 - `folder_id` is REQUIRED for `create_document` (no default)
 - ALWAYS call `get_folder_tree` first to find valid folder IDs
@@ -266,13 +266,8 @@ Automatically checks proposed approaches against existing architectural and busi
 
 Before implementing significant changes:
 
-```typescript
-mcp__brief__brief_execute_operation({
-  operation: "guard_approach",
-  parameters: {
-    approach: "Refactor authentication to use OAuth2 instead of API keys"
-  }
-})
+```bash
+brief ask --mode check "Refactor authentication to use OAuth2 instead of API keys"
 ```
 
 Returns:
@@ -280,7 +275,7 @@ Returns:
 - ⚠️ **Review**: Potential conflicts with D-123, D-456
 - ❌ **Blocked**: Direct conflict with D-789
 
-### When to Use guard_approach
+### When to Use brief ask --mode check
 
 Call before:
 - Architectural changes (auth, database, API design)
@@ -294,7 +289,7 @@ Call before:
 User: "Refactor auth to use OAuth2"
 
 Agent:
-1. Calls guard_approach("Switch from API keys to OAuth2 for authentication")
+1. Calls brief ask --mode check "Switch from API keys to OAuth2 for authentication"
 2. Response: "⚠️ Conflicts with D-234: Keep API keys for MCP server compatibility"
 3. Asks user: "Existing decision D-234 requires API keys for MCP. Proceed anyway?"
 4. User decides: proceed, modify approach, or cancel
@@ -362,4 +357,4 @@ Before merging any PR:
 - [ ] RLS filters applied to database queries
 - [ ] Error messages don't leak sensitive info
 - [ ] Tests verify unauthorized access is blocked
-- [ ] `guard_approach` called for architectural changes
+- [ ] `brief ask --mode check` called for architectural changes

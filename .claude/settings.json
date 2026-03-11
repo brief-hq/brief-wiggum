@@ -2,11 +2,12 @@
   "_note": "EXCEPTION: /prep command bypasses require_approval for git commit/push - user running /prep IS the approval",
   "permissions": {
     "allow": [
-      "mcp__brief__brief_get_onboarding_context:*",
-      "mcp__brief__brief_discover_capabilities:*",
-      "mcp__brief__brief_plan_operation:*",
-      "mcp__brief__brief_prepare_context:*",
-      "mcp__brief__brief_execute_operation:*",
+      "Bash(brief context:*)",
+      "Bash(brief ask:*)",
+      "Bash(brief search:*)",
+      "Bash(brief create:*)",
+      "Bash(brief update:*)",
+      "Bash(brief list:*)",
       "mcp__linear-server__get_issue:*",
       "mcp__linear-server__list_issues:*",
       "mcp__linear-server__get_document:*",
@@ -139,9 +140,7 @@
     "require_approval": [
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "mcp__brief__brief_execute_operation({\"operation\":\"delete_document\":*)",
-      "mcp__brief__brief_execute_operation({\"operation\":\"delete_folder\":*)",
-      "mcp__brief__brief_execute_operation({\"operation\":\"bulk_delete\":*)"
+      "Bash(brief delete:*)"
     ]
   },
   "hooks": {

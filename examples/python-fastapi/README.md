@@ -27,7 +27,7 @@ Brief Wiggum is designed for Node.js projects but can be adapted for Python:
 3. Update verification commands in:
    - `.claude/hooks/verify-complete.sh`
    - `.claude/scripts/ralph-prompts.sh`
-4. Connect Brief MCP (same as Node.js projects)
+4. Install Brief CLI (same as Node.js projects)
 5. Run `/onboard`
 
 ## Customization Notes
